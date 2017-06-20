@@ -42,7 +42,6 @@ import configureStore from './configureStore';
 // Import the pages
 import NotFound from './components/NotFound';
 import App from './components/App.react';
-import ListManagerContainer from './components/Lists/ListManagerContainer.react';
 
 import MultiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -76,7 +75,7 @@ ReactDOM.render(
     <Provider store={store}>
         <Router onUpdate={() => window.scrollTo(0, 0)} history={browserHistory}>
           <Route path='/' name='Home' component={App}>
-            <IndexRoute component={ListManagerContainer} />
+            <IndexRoute component={<div>ALOHA</div>} />
             <Route path='*' staticName name='Not Found' component={NotFound} />
           </Route>
         </Router>
