@@ -50,21 +50,18 @@ class App extends Component {
   render() {
     const props = this.props;
     const state = this.state;
+    let renderNode = <Login />;
+    if (props.isLogin) {
+      renderNode = <div>You are don't have access to NewsAI Media Database solution. Get access here.</div>;
+      if (props.person.mediadatabaseaccess) {
+        renderNode = <div>{props.children}</div>;
+      }
+      renderNode = <div>{props.children}</div>;
+    }
 
     return (
       <div style={styles.container}>
-        {
-          props.isLogin ?
-            <div>
-              {props.children}
-              <FloatingActionButton
-              id='custom_intercom_launcher'
-              backgroundColor={blue600}
-              style={styles.intercomBtn}
-              iconClassName='fa fa-comment-o'
-              />
-            </div> : <Login/>
-        }
+      {renderNode}
       </div>
       );
   }

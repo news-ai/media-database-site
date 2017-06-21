@@ -4,6 +4,7 @@ import {
   SET_FIRST_TIME_USER,
   REMOVE_FIRST_TIME_USER
 } from './constants';
+
 import alertify from 'alertifyjs';
 import 'node_modules/alertifyjs/build/css/alertify.min.css';
 alertify.set('notifier', 'position', 'top-right');
