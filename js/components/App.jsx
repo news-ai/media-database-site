@@ -5,7 +5,6 @@ import intercomSetup from '../chat';
 import {actions as loginActions} from 'components/Login';
 
 import Login from './Login';
-import {blue600} from 'material-ui/styles/colors';
 
 
 class App extends Component {

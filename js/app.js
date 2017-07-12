@@ -33,10 +33,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
-// import Route from 'react-router/lib/Route';
-// import IndexRoute from 'react-router/lib/IndexRoute';
-// import Router from 'react-router/lib/Router';
-// import browserHistory from 'react-router/lib/browserHistory';
 import configureStore from './configureStore';
 import {
   BrowserRouter as Router,
@@ -45,8 +41,8 @@ import {
 } from 'react-router-dom';
 
 // Import the pages
-import NotFound from './components/NotFound';
-import App from './components/App.react';
+import App from 'components/App';
+import Contacts from 'components/Contacts/Contacts';
 
 import MultiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -72,16 +68,6 @@ if (module.hot) {
     store.replaceReducer(nextRootReducer);
   });
 }
-const Contact = ({match}) => (
-  <div>{match.params.email} </div>
-  );
-
-const Contacts = ({match}) => (
-  <div>
-    <Route path={`${match.url}/:email`} component={Contact} />
-    <Route exact path={match.url} render={() => <div>Contacts</div>} />
-  </div>
-  );
 
 const Base = () => (
   <MultiThemeProvider>

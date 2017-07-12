@@ -1,8 +1,10 @@
 var path = require('path');
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+// var AppCachePlugin = require('appcache-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var CompressionPlugin = require('compression-webpack-plugin');
+// var SentryPlugin = require('webpack-sentry-plugin');
 
 module.exports = function(options) {
   var entry, plugins, cssLoaders;
@@ -11,14 +13,12 @@ module.exports = function(options) {
   if (options.prod) {
     entry = [
       'babel-polyfill',
-      path.resolve(__dirname, 'js/config.shared.js'),
-      path.resolve(__dirname, 'js/config.prod.js'),
       path.resolve(__dirname, 'js/app.js')
     ];
     cssLoaders = ExtractTextPlugin.extract({
       fallback: 'style-loader',
       use: [
-        { loader: 'css-loader', query: {sourceMap: true, importLoaders: 1} },
+        { loader: 'css-loader', options: {sourceMap: true, importLoaders: 1} },
         { loader: 'postcss-loader' },
         { loader: 'sass-loader' }
       ]
@@ -61,8 +61,10 @@ module.exports = function(options) {
       new ExtractTextPlugin('css/main.css'),
       new webpack.DefinePlugin({
         'process.env': {
-          NODE_ENV: JSON.stringify('production')
-        }
+          NODE_ENV: JSON.stringify('production'),
+          CIRCLE_SHA1: JSON.stringify(process.env.CIRCLE_SHA1),
+          MIXPANEL_TOKEN: JSON.stringify('f723102b5c5ab2931d4ec00b84f1d166')
+        },
       }),
       new webpack.optimize.AggressiveMergingPlugin(),
       new CompressionPlugin({
@@ -72,13 +74,12 @@ module.exports = function(options) {
         threshold: 10240,
         minRatio: 0
       }),
+      // new BundleAnalyzerPlugin()
     ];
   } else {
     entry = [
       'webpack-dev-server/client?http://localhost:3000',
       'webpack/hot/only-dev-server',
-      path.resolve(__dirname, 'js/config.shared.js'),
-      path.resolve(__dirname, 'js/config.dev.js'),
       path.resolve(__dirname, 'js/app.js')
     ];
     cssLoaders = [
@@ -93,13 +94,18 @@ module.exports = function(options) {
         template: 'index.html',
         inject: true,
         favicon: 'favicon.ico',
-      })
+      }),
+      new webpack.DefinePlugin({
+        'process.env': {
+          NODE_ENV: JSON.stringify('development'),
+        },
+      }),
     ];
   }
 
   return {
     bail: true,
-    devtool: options.prod ? 'inline-source-map' : 'eval-cheap-module-source-map',
+    devtool: options.prod ? 'hidden-source-map' : 'eval-cheap-module-source-map',
     entry: entry,
     output: { // Compile into js/build.js
       path: path.resolve(__dirname, 'build'),
@@ -110,7 +116,7 @@ module.exports = function(options) {
     module: {
       rules: [
         {
-          test: /\.js$/,
+          test: /\.(js|jsx)$/,
           use: 'babel-loader',
           exclude: path.join(__dirname, '/node_modules/')
         },

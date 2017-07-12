@@ -1,4 +1,5 @@
-import {loginConstant} from './constants';
+
+import {contactConstant} from './constants';
 import {assignToEmpty} from 'utils/assign';
 
 const initialState = {
@@ -6,17 +7,17 @@ const initialState = {
   didInvalidate: false
 };
 
-function personReducer(state = initialState, action) {
+function contactReducer(state = initialState, action) {
   if (window.isDev) Object.freeze(state);
   switch (action.type) {
-    case loginConstant.REQUEST:
+    case contactConstant.REQUEST:
       return assignToEmpty(state, {isReceiving: true});
-    case loginConstant.RECEIVE:
+    case contactConstant.RECEIVE:
       return assignToEmpty(state, {
         isReceiving: false,
-        person: action.person
+        [action.email]: action.contact
       });
-    case loginConstant.REQUEST_FAIL:
+    case contactConstant.REQUEST_FAIL:
       return assignToEmpty(state, {
         isReceiving: false,
         didInvalidate: true
@@ -26,4 +27,4 @@ function personReducer(state = initialState, action) {
   }
 }
 
-export default personReducer;
+export default contactReducer;
