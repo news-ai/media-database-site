@@ -17,6 +17,7 @@
     "moment-timezone": "^0.5.9",
     "normalizr": "^3.2.3",
     "object-assign": "^4.1.0",
+    "query-string": "^4.3.4",
     "react": "^15.5.4",
     "react-addons-css-transition-group": "^15.2.1",
     "react-addons-shallow-compare": "^15.3.2",
