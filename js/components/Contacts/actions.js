@@ -8,10 +8,7 @@ export function fetchContact(email) {
   return dispatch => {
     dispatch({type: contactConstant.REQUEST, email});
     return api.get(`/database-contacts/${email}`)
-    .then(response => {
-      const res = normalize(response.data, contactSchema);
-      return dispatch({type: contactConstant.RECEIVE, email, contact: res.entities.contacts});
-    })
+    .then(response => dispatch({type: contactConstant.RECEIVE, email, contact: response.data}))
     .catch(err => console.log(err));
   };
 }
