@@ -29,37 +29,6 @@ function loginFail(message) {
   };
 }
 
-export function addExtraEmail(email) {
-  return dispatch => {
-    dispatch({type: 'ADD_EXTRA_EMAIL', email});
-    return api.post(`/users/me/add-email`, {email})
-    .then(response => {
-      alertify.notify(`Confirmation email has been sent to ${email}`, 'custom', 8, function() {});
-      dispatch({type: 'ADD_EXTRA_EMAIL_CONFIRMATION_SENT'});
-      dispatch({type: 'RECEIVE_NOTIFICATION', message: `Confirmation email has been sent to ${email}`});
-      return dispatch(receiveLogin(response.data));
-    })
-    .catch(err => console.log(err));
-  };
-}
-
-export function postFeedback(reason, feedback) {
-  return (dispatch) => {
-    dispatch({type: 'POSTING_FEEDBACK', reason, feedback});
-    return api.post(`/users/me/feedback`, {reason, feedback})
-    .then(response => dispatch({type: 'POSTED_FEEDBACK'}))
-    .catch(err => dispatch({type: 'POSTED_FEEDBACK_FAIL'}));
-  };
-}
-
-export function setFirstTimeUser() {
-  return dispatch => dispatch({type: SET_FIRST_TIME_USER});
-}
-
-export function removeFirstTimeUser() {
-  return dispatch => dispatch({type: REMOVE_FIRST_TIME_USER});
-}
-
 export function loginWithGoogle() {
   return dispatch => {
     const base = `${window.TABULAE_API_BASE}/auth/google?next=${window.location}`;

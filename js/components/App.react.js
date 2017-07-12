@@ -1,13 +1,10 @@
 import React, {Component} from 'react';
-import withRouter from 'react-router/lib/withRouter';
 import {connect} from 'react-redux';
 import intercomSetup from '../chat';
 
 import {actions as loginActions} from 'components/Login';
 
 import Login from './Login';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-// import NotificationPanel from 'components/Notifications/NotificationPanel.react';
 import {blue600} from 'material-ui/styles/colors';
 
 
@@ -16,7 +13,6 @@ class App extends Component {
     super(props);
     this.state = {
       isLogin: false,
-      firstTimeUser: false,
       didScroll: false,
     };
   }
@@ -38,10 +34,6 @@ class App extends Component {
         custom_launcher_selector: '#custom_intercom_launcher',
         user_id: nextProps.person.id
       });
-      // if (!window.isDev) {
-      //   Raven.config('https://c6c781f538ef4b6a952dc0ad3335cf61@sentry.io/100317').install();
-      //   Raven.setUserContext({email: nextProps.person.email, id: nextProps.person.id});
-      // }
 
       this.setState({isLogin: true});
     }
@@ -52,11 +44,10 @@ class App extends Component {
     const state = this.state;
     let renderNode = <Login />;
     if (props.isLogin) {
-      renderNode = <div>You are don't have access to NewsAI Media Database solution. Get access here.</div>;
+      renderNode = <div>You don't have access to NewsAI Media Database solution. Get access here.</div>;
       if (props.person.mediadatabaseaccess) {
-        renderNode = <div>{props.children}</div>;
+        renderNode = <div>HOME</div>;
       }
-      renderNode = <div>{props.children}</div>;
     }
 
     return (
@@ -84,7 +75,6 @@ const mapStateToProps = (state, props) => {
     isLogin: state.personReducer.person ? true : false,
     loginDidInvalidate: state.personReducer.didInvalidate,
     person: state.personReducer.person,
-    firstTimeUser: props.location.query.firstTimeUser || state.personReducer.firstTimeUser,
   };
 };
 
@@ -92,8 +82,7 @@ const mapDispatchToProps = dispatch => {
   return {
     getAuth: _ => dispatch(loginActions.fetchPerson()),
     logoutClick: _ => dispatch(loginActions.logout()),
-    setFirstTimeUser: _ => dispatch(loginActions.setFirstTimeUser()),
   };
 };
 
-export default connect( mapStateToProps, mapDispatchToProps )(withRouter(App));
+export default connect( mapStateToProps, mapDispatchToProps)(App);

@@ -33,11 +33,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
-import Route from 'react-router/lib/Route';
-import IndexRoute from 'react-router/lib/IndexRoute';
-import Router from 'react-router/lib/Router';
-import browserHistory from 'react-router/lib/browserHistory';
+// import Route from 'react-router/lib/Route';
+// import IndexRoute from 'react-router/lib/IndexRoute';
+// import Router from 'react-router/lib/Router';
+// import browserHistory from 'react-router/lib/browserHistory';
 import configureStore from './configureStore';
+import {
+  BrowserRouter as Router,
+  Route,
+  Link
+} from 'react-router-dom';
 
 // Import the pages
 import NotFound from './components/NotFound';
@@ -53,7 +58,7 @@ import '../css/main.css';
 const store = configureStore();
 
 window.TABULAE_API_BASE = window.isDev ? `https://dev-dot-newsai-1166.appspot.com/api` : `https://tabulae.newsai.org/api`;
-window.TABULAE_HOME = window.isDev ? `https://tabulae-dev.newsai.co` : `https://tabulae.newsai.co`;
+// window.TABULAE_HOME = window.isDev ? `https://tabulae-dev.newsai.co` : `https://tabulae.newsai.co`;
 
 
 // third-party services setups
@@ -67,19 +72,31 @@ if (module.hot) {
     store.replaceReducer(nextRootReducer);
   });
 }
+const Contact = ({match}) => (
+  <div>{match.params.email} </div>
+  );
 
-// wrap components that we want onboarding to, pass down props like routes
+const Contacts = ({match}) => (
+  <div>
+    <Route path={`${match.url}/:email`} component={Contact} />
+    <Route exact path={match.url} render={() => <div>Contacts</div>} />
+  </div>
+  );
 
-ReactDOM.render(
+const Base = () => (
   <MultiThemeProvider>
     <Provider store={store}>
-        <Router onUpdate={() => window.scrollTo(0, 0)} history={browserHistory}>
-          <Route path='/' name='Home' component={App}>
-            <IndexRoute component={<div>ALOHA</div>} />
-            <Route path='*' staticName name='Not Found' component={NotFound} />
-          </Route>
-        </Router>
+      <Router>
+        <div>
+          <Route exact path='/' component={App} />
+          <Route path='/contacts' component={Contacts} />
+        </div>
+      </Router>
       </Provider>
-    </MultiThemeProvider>,
+    </MultiThemeProvider>
+  );
+
+ReactDOM.render(
+  <Base />,
   document.getElementById('app')
 );
