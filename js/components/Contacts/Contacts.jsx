@@ -3,10 +3,10 @@ import {connect} from 'react-redux';
 import {Route} from 'react-router-dom';
 import * as contactActions from './actions';
 import queryString from 'query-string';
-import {lightBlue50, blue100, grey700} from 'material-ui/styles/colors';
+import {lightBlue50, blue50, blue300, grey700} from 'material-ui/styles/colors';
 import Image from './Image';
 import Tag from 'components/Tags/Tag';
-
+import TweetFeed from 'components/Contacts/Tweets/TweetFeed';
 
 const ContactView = ({contactInfo, demographics, photos, writingInformation}) => (
   <div>
@@ -20,9 +20,11 @@ const ContactView = ({contactInfo, demographics, photos, writingInformation}) =>
       <div style={{display: 'block'}} >
         <span style={{color: grey700, fontSize: '1.1em'}} >{demographics.locationGeneral}</span>
       </div>
+      <div style={{display: 'block', marginTop: 20}} >
+        {writingInformation.beats.map(beat => <Tag textStyle={{fontSize: '1em'}} color={lightBlue50} borderColor={blue300} hideDelete text={beat} />)}
+        {writingInformation.occasionalBeats.map(beat => <Tag textStyle={{fontSize: '1em'}} color={blue50} borderColor={blue300} hideDelete text={beat} />)}
+      </div>
     </div>
-    beats: {writingInformation.beats.map(beat => <Tag borderColor={blue100} hideDelete text={beat} />)}
-    occasionalBeats: {writingInformation.occasionalBeats.map(beat => <Tag borderColor={blue100} hideDelete text={beat} />)}
     {writingInformation.isFreelancer && <span>Freelancing</span>}
   </div>
   );
@@ -49,6 +51,7 @@ class Contact extends Component {
       <div className='row horizontal-center'>
         <div className='large-8 medium-10 small-12 columns' >
           <ContactView {...contact} />
+          <TweetFeed email={email} />
         </div>
       </div>);
     return renderNode;

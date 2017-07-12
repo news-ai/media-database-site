@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import * as contactActions from './actions';
+import queryString from 'query-string';
 
 class Contact extends Component {
   constructor(props) {

@@ -26,9 +26,11 @@
     "react-redux": "^5.0.5",
     "react-router-dom": "^4.1.1",
     "react-tap-event-plugin": "^2.0.1",
+    "react-virtualized": "^9.9.0",
     "redux": "^3.7.1",
     "redux-logger": "^2.10.2",
-    "redux-thunk": "^1.0.3"
+    "redux-thunk": "^1.0.3",
+    "validator": "^8.0.0"
   },
   "devDependencies": {
     "autoprefixer": "^6.0.2",
