@@ -16,10 +16,7 @@ class TweetFeed extends Component {
   }
 
   componentWillMount() {
-    this.props.fetchTweets()
-    .then(_ => {
-      this._TweetFeed.recomputeRowHeights();
-    });
+    this.props.fetchTweets();
   }
 
   rowRenderer({key, index, parent, isScrolling, isVisible, style}) {
@@ -31,7 +28,7 @@ class TweetFeed extends Component {
         parent={parent}
         rowIndex={index}
       >
-        <div key={key} style={style} >
+        <div key={key} style={Object.assign({}, style, {padding: 5})} >
           <Tweet {...this.props.tweets[index]} />
         </div>
       </CellMeasurer>
@@ -49,7 +46,7 @@ class TweetFeed extends Component {
         width={width}
         height={500}
         rowCount={tweets.length}
-        rowHeight={20}
+        rowHeight={this._cache.rowHeight}
         rowRenderer={this.rowRenderer}
         />
         )}

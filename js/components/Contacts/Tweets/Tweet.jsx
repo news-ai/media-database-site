@@ -1,21 +1,19 @@
 import React from 'react';
-import {grey400, grey800} from 'material-ui/styles/colors';
+import {grey600, grey800} from 'material-ui/styles/colors';
 import isURL from 'validator/lib/isURL';
 
 const defaultStyle = {
-  paddingTop: 10,
-  paddingBottom: 10,
-  marginTop: 10,
-  marginBottom: 10,
+  paddingTop: 5,
+  paddingBottom: 5,
   border: `dotted 1px ${grey400}`,
   borderRadius: '0.4em',
+  margin: 5,
   minHeight: 100,
   width: '100%',
-  maxWidth: '100%'
 };
 
 const styles = {
-  label: {color: grey400},
+  label: {color: grey600},
   urlSpan: {color: grey800},
   timestring: {marginLeft: 8}
 };
