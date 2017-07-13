@@ -5,7 +5,7 @@ import isURL from 'validator/lib/isURL';
 const defaultStyle = {
   paddingTop: 5,
   paddingBottom: 5,
-  border: `dotted 1px ${grey400}`,
+  border: `dotted 1px ${grey600}`,
   borderRadius: '0.4em',
   margin: 5,
   minHeight: 100,
@@ -31,7 +31,7 @@ const Tweet = ({style, text, username, createdat, tweetidstr}) => {
         </span>
       </div>
       <div className='large-12 medium-12 small-12 columns'>
-        {text !== null && text
+        {text !== null && text && text
         .split(' ')
         .map((block, i) => <a key={`${tweetidstr}-${i}`} style={styles.urlSpan} target='_blank' href={isURL(block) ? block : `https://twitter.com/statuses/${tweetidstr}`}>{block} </a>)}
       </div>

@@ -42,18 +42,24 @@ class Contact extends Component {
 
   render() {
     const {contact, query, email, isReceiving} = this.props;
-    console.log(contact);
-    console.log(query);
-    console.log(email);
+    // console.log(contact);
+    // console.log(query);
+    // console.log(email);
     let renderNode = <div>Not Found</div>;
     if (isReceiving) renderNode = <div>LOADING...</div>;
-    if (contact) renderNode = (
+    if (contact) {
+      renderNode = (
       <div className='row horizontal-center'>
         <div className='large-8 medium-10 small-12 columns' >
           <ContactView {...contact} />
+          <div style={{padding: '10px 0', backgroundColor: lightBlue50}} >
+            <span style={{color: grey700, marginLeft: 10}} >Tweets from {contact.contactInfo.givenName}</span>
+          </div>
           <TweetFeed email={email} />
         </div>
-      </div>);
+      </div>
+      );
+    }
     return renderNode;
   }
 }

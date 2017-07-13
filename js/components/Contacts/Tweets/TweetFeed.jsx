@@ -36,7 +36,7 @@ class TweetFeed extends Component {
   }
 
   render() {
-    const {tweets} = this.props;
+    const {tweets, fetchTweets} = this.props;
     return (
       <AutoSizer disableHeight>
       {({width}) => (
@@ -48,6 +48,9 @@ class TweetFeed extends Component {
         rowCount={tweets.length}
         rowHeight={this._cache.rowHeight}
         rowRenderer={this.rowRenderer}
+        onScroll={args => {
+          if (((args.scrollHeight - args.scrollTop) / args.clientHeight) < 2) fetchTweets();
+        }}
         />
         )}
       </AutoSizer>
