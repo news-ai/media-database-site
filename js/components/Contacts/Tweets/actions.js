@@ -14,16 +14,15 @@ export function fetchContactTweets(email) {
     dispatch({type: tweetConstant.REQUEST_MULTIPLE, email});
     return api.get(`/database-contacts/${email}/tweets?limit=${PAGE_LIMIT}&offset=${OFFSET}`)
     .then(response => {
-      console.log(response);
       const res = normalize(response.data, tweetListSchema);
-      console.log(res);
 
       return dispatch({
         type: tweetConstant.RECEIVE_MULTIPLE,
         email,
         tweets: res.entities.tweets,
         ids: res.result,
-        offset: res.result.length < PAGE_LIMIT ? null : OFFSET + PAGE_LIMIT});
+        offset: res.result.length < PAGE_LIMIT ? null : OFFSET + PAGE_LIMIT
+      });
     })
     .catch(err => {
       console.log(err);

@@ -48,9 +48,7 @@ class TweetFeed extends Component {
         rowCount={tweets.length}
         rowHeight={this._cache.rowHeight}
         rowRenderer={this.rowRenderer}
-        onScroll={args => {
-          if (((args.scrollHeight - args.scrollTop) / args.clientHeight) < 2) fetchTweets();
-        }}
+        onScroll={args => ((args.scrollHeight - args.scrollTop) / args.clientHeight) < 2 ? fetchTweets() : null}
         />
         )}
       </AutoSizer>
@@ -66,7 +64,7 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    fetchTweets: _ => dispatch(actions.fetchContactTweets(props.email))
+    fetchTweets: _ => dispatch(actions.fetchContactTweets(props.email)),
   };
 };
 

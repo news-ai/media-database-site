@@ -65,7 +65,9 @@ window.TABULAE_API_BASE = process.env.NODE_ENV === 'development' ? `https://dev-
 if (module.hot) {
   module.hot.accept('./reducers/rootReducer', () => {
     const nextRootReducer = require('./reducers/rootReducer').default;
+    const nextRootEpic = require('./reducers/rootEpic').default;
     store.replaceReducer(nextRootReducer);
+    store.replaceEpic(nextRootEpic);
   });
 }
 

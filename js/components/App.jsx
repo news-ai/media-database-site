@@ -3,8 +3,10 @@ import {connect} from 'react-redux';
 import intercomSetup from '../chat';
 
 import {actions as loginActions} from 'components/Login';
+import {loginConstants} from 'components/Login/constants';
 
 import Login from './Login';
+import Home from './Home/Home.jsx';
 
 
 class App extends Component {
@@ -45,7 +47,7 @@ class App extends Component {
     if (props.isLogin) {
       renderNode = <div>You don't have access to NewsAI Media Database solution. Get access here.</div>;
       if (props.person.mediadatabaseaccess) {
-        renderNode = <div>HOME</div>;
+        renderNode = <Home />;
       }
     }
 
@@ -79,7 +81,7 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getAuth: _ => dispatch(loginActions.fetchPerson()),
+    getAuth: _ => dispatch({type: loginConstants.REQUEST}),
     logoutClick: _ => dispatch(loginActions.logout()),
   };
 };
