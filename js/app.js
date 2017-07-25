@@ -39,6 +39,7 @@ import {
   Route,
   Link
 } from 'react-router-dom';
+import PrivateRoute from './PrivateRoute';
 
 // Import the pages
 import App from 'components/App';
@@ -77,7 +78,7 @@ const Base = () => (
       <Router>
         <div>
           <Route exact path='/' component={App} />
-          <Route path='/contacts' component={Contacts} />
+          <PrivateRoute path='/contacts' component={Contacts} />
         </div>
       </Router>
       </Provider>

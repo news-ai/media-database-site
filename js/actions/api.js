@@ -1,12 +1,24 @@
 import fetch from 'isomorphic-fetch';
+import {Observable} from 'rxjs';
+import 'rxjs';
+
+// export function get(endpoint) {
+//   const req = fetch(`${window.TABULAE_API_BASE}${endpoint}`, {
+//     method: 'GET',
+//     credentials: 'include'
+//   })
+//   .then(response => response.status === 200 ? response.text() : Promise.reject(response))
+//   .then(text => JSON.parse(text));
+//   console.log(req);
+//   return Observable.fromPromise(req);
+// }
 
 export function get(endpoint) {
   return fetch(`${window.TABULAE_API_BASE}${endpoint}`, {
     method: 'GET',
     credentials: 'include'
   })
-    .then(response => response.status === 200 ? response.text() : Promise.reject(response))
-    .then(text => JSON.parse(text));
+  .then(response => response.status === 200 ? response.json() : Promise.reject(response))
 }
 
 export function deleteRequest(endpoint) {

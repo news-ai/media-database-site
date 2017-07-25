@@ -6,13 +6,14 @@ import {contactConstant} from './constants';
 export const fetchContactProfile = action$ =>
   action$.ofType('FETCH_CONTACT_PROFILE')
   .switchMap(({email}) =>
-    Observable.merge(
+    Observable.onErrorResumeNext(
       Observable.of({type: 'FETCH_CONTACT', email}),
       // Observable.of({type: 'FETCH_TWITTER_PROFILE', email}),
       Observable.of({type: 'FETCH_CONTACT_TWEETS', email})
       )
     )
-  .takeUntil(action$.ofType('FETCH_CONTACT_PROFILE_ABORT'));
+  .takeUntil(action$.ofType('FETCH_CONTACT_PROFILE_ABORT'))
+  .catch(err => console.log(err));
 
 export const fetchContact = (action$, {getState}) =>
   action$.ofType('FETCH_CONTACT')
@@ -23,8 +24,11 @@ export const fetchContact = (action$, {getState}) =>
   .switchMap(({email}) =>
     Observable.merge(
       Observable.of({type: contactConstant.REQUEST, email}),
-      Observable.fromPromise(api.get(`/database-contacts/${email}`))
-      .map(response => ({type: contactConstant.RECEIVE, email, contact: response.data}))
+      Observable.from(api.get(`/database-contacts/${email}`))
+      .map(response => {
+        console.log(response);
+        return ({type: contactConstant.RECEIVE, email, contact: response.data});
+      })
       .catch(err => ({type: contactConstant.REQUEST_FAIL, message: err, email}))
       )
     )

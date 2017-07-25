@@ -12,9 +12,9 @@ export const fetchTwitterProfile = (action$, {getState}) =>
   .switchMap(({email}) =>
     Observable.merge(
       Observable.of({type: twitterProfileConstant.REQUEST, email}),
-      Observable.fromPromise(api.get(`/contacts/${email}/twitterprofile`))
-      .map(response => ({email, type: twitterProfileConstant.RECEIVE, profile: response.data}))
+      Observable.from(api.get(`/contacts/${email}/twitterprofile`))
       .catch(err => ({type: twitterProfileConstant.REQUEST_FAIL, message: err}))
+      .map(response => ({email, type: twitterProfileConstant.RECEIVE, profile: response.data}))
       )
     )
-  .takeUntil(action$.ofType('FETCH_TWITTER_PROFILE_ABORT'));
+  .takeUntil(action$.ofType('FETCH_TWITTER_PROFILE_ABORT'))

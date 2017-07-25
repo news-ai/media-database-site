@@ -20,6 +20,7 @@ export const fetchContactTweets = (action$, {getState}) =>
       Observable.of({type: tweetConstant.REQUEST_MULTIPLE, email}),
       Observable.fromPromise(api.get(`/database-contacts/${email}/tweets?limit=${PAGE_LIMIT}&offset=${OFFSET}`))
       .map(response => {
+        console.log(response);
         const res = normalize(response.data, tweetListSchema);
         return ({
           type: tweetConstant.RECEIVE_MULTIPLE,

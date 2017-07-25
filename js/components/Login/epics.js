@@ -7,8 +7,7 @@ import intercomSetup from '../../chat';
 export const fetchPerson = action$ =>
   action$.ofType(loginConstant.REQUEST)
   .switchMap(_ => {
-    console.log('hey');
-    return Observable.fromPromise(api.get('/users/me'))
+    return Observable.from(api.get('/users/me'))
     .map(response => ({type: loginConstant.RECEIVE, person: response.data}));
   })
   .takeUntil(action$.ofType(loginConstant.ABORT));
