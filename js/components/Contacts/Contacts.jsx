@@ -36,7 +36,7 @@ class Contact extends Component {
 
   componentDidMount() {
     if (!this.props.contact) {
-      this.props.fetchContact(this.props.email);
+      this.props.fetchContactProfile();
     }
   }
 
@@ -47,7 +47,7 @@ class Contact extends Component {
     // console.log(email);
     let renderNode = <div>Not Found</div>;
     if (isReceiving) renderNode = <div>LOADING...</div>;
-    if (contact) {
+    if (contact && !isReceiving) {
       renderNode = (
       <div className='row horizontal-center'>
         <div className='large-8 medium-10 small-12 columns' >
@@ -74,9 +74,10 @@ const mapStateToProps = (state, props) => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch, props) => {
+  const query = queryString.parse(props.location.search);
   return {
-    fetchContact: email => dispatch(contactActions.fetchContact(email)),
+    fetchContactProfile: _ => dispatch({type: 'FETCH_CONTACT_PROFILE', email: query.email}),
   };
 };
 

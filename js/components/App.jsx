@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import intercomSetup from '../chat';
 
 import {actions as loginActions} from 'components/Login';
-import {loginConstants} from 'components/Login/constants';
+import {loginConstant} from 'components/Login/constants';
 
 import Login from './Login';
 import Home from './Home/Home.jsx';
@@ -13,31 +12,12 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLogin: false,
       didScroll: false,
     };
   }
 
   componentWillMount() {
     this.props.getAuth();
-  }
-
-  componentDidMount() {
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.isLogin && !this.state.isLogin && nextProps.person) {
-      const appId = window.isDev ? 'eh8247hf' : 'ur8dbk9e';
-      intercomSetup({
-        app_id: appId,
-        email: nextProps.person.email,
-        name: `${nextProps.person.firstname} ${nextProps.person.lastname}`,
-        custom_launcher_selector: '#custom_intercom_launcher',
-        user_id: nextProps.person.id
-      });
-
-      this.setState({isLogin: true});
-    }
   }
 
   render() {
@@ -81,7 +61,7 @@ const mapStateToProps = (state, props) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getAuth: _ => dispatch({type: loginConstants.REQUEST}),
+    getAuth: _ => dispatch({type: loginConstant.REQUEST}),
     logoutClick: _ => dispatch(loginActions.logout()),
   };
 };

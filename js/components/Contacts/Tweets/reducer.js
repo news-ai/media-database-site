@@ -13,13 +13,16 @@ function tweetReducer(state = initialState, action) {
   let obj;
   switch (action.type) {
     case tweetConstant.REQUEST_MULTIPLE:
-      obj = assignToEmpty(state, {});
+      obj = assignToEmpty(state, {
+        [action.email]: state[action.email] ? assignToEmpty(state[action.email], {isReceiving: true}) : {isReceiving: true, received: []}
+      });
       obj.isReceiving = true;
       return obj;
     case tweetConstant.RECEIVE_MULTIPLE:
       obj = assignToEmpty(obj, action.tweets);
-      const oldContact = state[action.email] || {received: []};
+      const oldContact = state[action.email];
       obj[action.email] = assignToEmpty(state[action.email], {
+        isReceiving: false,
         received: [
           ...oldContact.received,
           ...action.ids.filter(id => !oldContact[id])

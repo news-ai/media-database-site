@@ -1,3 +1,4 @@
+// NOT USING
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import * as contactActions from './actions';

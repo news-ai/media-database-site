@@ -13,18 +13,21 @@ function twitterProfileReducer(state = initialState, action) {
   let obj;
   switch (action.type) {
     case twitterProfileConstant.REQUEST:
-      obj = assignToEmpty(state, {});
-      obj.isReceiving = true;
-      return obj;
+      return assignToEmpty(state, {
+        isReceiving: true,
+        [action.email]: state[action.email] ? assignToEmpty(state[action.email], {isReceiving: true}) : {isReceiving: true}
+      });
     case twitterProfileConstant.RECEIVE:
-      obj = assignToEmpty(state, {});
-      obj[action.email] = action.profile;
-      obj.isReceiving = false;
-      return obj;
+      return assignToEmpty(state, {
+        isReceiving: false,
+        [action.email]: assignToEmpty(action.profile, {isReceiving: false}),
+        received: [...state.received.filter(e => e !== action.email), action.email]
+      });
     case twitterProfileConstant.REQUEST_FAIL:
-      obj = assignToEmpty(state, {});
-      obj.didInvalidate = true;
-      return obj;
+      return assignToEmpty(state, {
+        isReceiving: false,
+        didInvalidate: true
+      });
     default:
       return state;
   }

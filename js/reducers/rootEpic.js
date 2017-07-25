@@ -1,8 +1,16 @@
 import {combineEpics} from 'redux-observable';
-import * as personEpics from 'components/Login/epics';
+import {fetchPerson, setupThirdparty} from 'components/Login/epics';
+import {fetchContactTweets} from 'components/Contacts/Tweets/epics';
+import {fetchTwitterProfile} from 'components/Contacts/TwitterProfile/epics';
+import {fetchContactProfile, fetchContact} from 'components/Contacts/epics';
 
 const rootEpic = combineEpics(
-  ...personEpics
+  fetchPerson,
+  setupThirdparty,
+  fetchTwitterProfile,
+  fetchContactTweets,
+  fetchContactProfile,
+  fetchContact
   );
 
 export default rootEpic;

@@ -16,7 +16,7 @@ class TweetFeed extends Component {
   }
 
   componentWillMount() {
-    this.props.fetchTweets();
+    // this.props.fetchTweets();
   }
 
   rowRenderer({key, index, parent, isScrolling, isVisible, style}) {
@@ -57,14 +57,16 @@ class TweetFeed extends Component {
 }
 
 const mapStateToProps = (state, props) => {
+  const contact = state.tweetReducer[props.email];
   return {
-    tweets: state.tweetReducer[props.email] ? state.tweetReducer[props.email].received.map(id => state.tweetReducer[id]) : []
+    tweets: contact && contact.received ? state.tweetReducer[props.email].received.map(id => state.tweetReducer[id]) : [],
+    isReceiving: contact.isReceiving
   };
 };
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    fetchTweets: _ => dispatch(actions.fetchContactTweets(props.email)),
+    fetchTweets: _ => dispatch({type: 'FETCH_CONTACT_TWEETS', email: props.email}),
   };
 };
 

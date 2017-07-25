@@ -71,17 +71,17 @@ export function logout() {
   };
 }
 
-export function fetchPerson() {
-  return (dispatch, getState) => {
-    if (getState().personReducer.person) return;
-    dispatch(requestLogin());
-    return api.get('/users/me')
-    .then(response => dispatch(receiveLogin(response.data)))
-    .catch(message => {
-      if (window.isDev) console.log(message);
-    });
-  };
-}
+// export function fetchPerson() {
+//   return (dispatch, getState) => {
+//     if (getState().personReducer.person) return;
+//     dispatch(requestLogin());
+//     return api.get('/users/me')
+//     .then(response => dispatch(receiveLogin(response.data)))
+//     .catch(message => {
+//       if (window.isDev) console.log(message);
+//     });
+//   };
+// }
 
 export function fetchUser(userId) {
   return (dispatch, getState) => {

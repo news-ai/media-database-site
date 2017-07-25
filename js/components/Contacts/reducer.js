@@ -4,18 +4,23 @@ import {assignToEmpty} from 'utils/assign';
 
 const initialState = {
   isReceiving: false,
-  didInvalidate: false
+  didInvalidate: false,
+  received: []
 };
 
 function contactReducer(state = initialState, action) {
   if (window.isDev) Object.freeze(state);
   switch (action.type) {
     case contactConstant.REQUEST:
-      return assignToEmpty(state, {isReceiving: true});
+      return assignToEmpty(state, {
+        isReceiving: true,
+        [action.email]: state[action.email] ? assignToEmpty(state[action.email], {isReceiving: true}) : {isReceiving: true}
+      });
     case contactConstant.RECEIVE:
       return assignToEmpty(state, {
         isReceiving: false,
-        [action.email]: action.contact
+        [action.email]: assignToEmpty(action.contact, {isReceiving: false}),
+        received: [...state.received.filter(e => e !== action.email), action.email]
       });
     case contactConstant.REQUEST_FAIL:
       return assignToEmpty(state, {
