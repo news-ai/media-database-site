@@ -7,6 +7,7 @@ import {lightBlue50, blue50, blue300, grey700} from 'material-ui/styles/colors';
 import Image from './Image';
 import Tag from 'components/Tags/Tag';
 import TweetFeed from 'components/Contacts/Tweets/TweetFeed';
+import HeadlineFeed from 'components/Headlines/HeadlineFeed';
 
 const ContactView = ({contactInfo, demographics, photos, writingInformation}) => (
   <div>
@@ -56,6 +57,7 @@ class Contact extends Component {
             <span style={{color: grey700, marginLeft: 10}} >Tweets from {contact.contactInfo.givenName}</span>
           </div>
           <TweetFeed email={email} />
+          <HeadlineFeed email={email} />
         </div>
       </div>
       );
