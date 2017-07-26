@@ -21,8 +21,8 @@ const ContactView = ({contactInfo, demographics, photos, writingInformation}) =>
         <span style={{color: grey700, fontSize: '1.1em'}} >{demographics.locationGeneral}</span>
       </div>
       <div style={{display: 'block', marginTop: 20}} >
-        {writingInformation.beats.map(beat => <Tag textStyle={{fontSize: '1em'}} color={lightBlue50} borderColor={blue300} hideDelete text={beat} />)}
-        {writingInformation.occasionalBeats.map(beat => <Tag textStyle={{fontSize: '1em'}} color={blue50} borderColor={blue300} hideDelete text={beat} />)}
+        {writingInformation.beats.map(beat => <Tag key={beat} textStyle={{fontSize: '1em'}} color={lightBlue50} borderColor={blue300} hideDelete text={beat} />)}
+        {writingInformation.occasionalBeats.map(beat => <Tag key={beat} textStyle={{fontSize: '1em'}} color={blue50} borderColor={blue300} hideDelete text={beat} />)}
       </div>
     </div>
     {writingInformation.isFreelancer && <span>Freelancing</span>}

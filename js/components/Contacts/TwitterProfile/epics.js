@@ -12,7 +12,7 @@ export const fetchTwitterProfile = (action$, {getState}) =>
   .switchMap(({email}) =>
     Observable.merge(
       Observable.of({type: twitterProfileConstant.REQUEST, email}),
-      Observable.from(api.get(`/contacts/${email}/twitterprofile`))
+      Observable.from(api.get(`/database-contacts/${email}/twitterprofile`))
       .catch(err => ({type: twitterProfileConstant.REQUEST_FAIL, message: err}))
       .map(response => ({email, type: twitterProfileConstant.RECEIVE, profile: response.data}))
       )

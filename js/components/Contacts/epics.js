@@ -8,8 +8,9 @@ export const fetchContactProfile = action$ =>
   .switchMap(({email}) =>
     Observable.onErrorResumeNext(
       Observable.of({type: 'FETCH_CONTACT', email}),
-      // Observable.of({type: 'FETCH_TWITTER_PROFILE', email}),
-      Observable.of({type: 'FETCH_CONTACT_TWEETS', email})
+      Observable.of({type: 'FETCH_CONTACT_TWEETS', email}),
+      Observable.of({type: 'FETCH_CONTACT_HEADLINES', email}),
+      Observable.of({type: 'FETCH_TWITTER_PROFILE', email})
       )
     )
   .takeUntil(action$.ofType('FETCH_CONTACT_PROFILE_ABORT'))
@@ -26,7 +27,6 @@ export const fetchContact = (action$, {getState}) =>
       Observable.of({type: contactConstant.REQUEST, email}),
       Observable.from(api.get(`/database-contacts/${email}`))
       .map(response => {
-        console.log(response);
         return ({type: contactConstant.RECEIVE, email, contact: response.data});
       })
       .catch(err => ({type: contactConstant.REQUEST_FAIL, message: err, email}))

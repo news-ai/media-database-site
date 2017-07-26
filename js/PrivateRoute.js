@@ -27,8 +27,6 @@ class PrivateRoute extends Component {
   render() {
     const {component, ...rest} = this.props;
     const Component = component;
-    console.log(rest.person);
-    console.log(rest.isReceiving);
     return (
       <Route {...rest} render={props => (
           rest.person ? (
