@@ -1,7 +1,5 @@
 import React from 'react';
 import {grey600, grey800} from 'material-ui/styles/colors';
-import {Link} from 'react-router-dom';
-import isURL from 'validator/lib/isURL';
 
 const defaultStyle = {
   paddingTop: 5,

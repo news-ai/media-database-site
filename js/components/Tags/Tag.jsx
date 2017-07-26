@@ -1,6 +1,6 @@
 import React from 'react';
 import {grey50, grey200, grey800, grey500} from 'material-ui/styles/colors';
-import {Link} from 'react-router-dom';
+import Link from 'react-router/lib/Link';
 import FontIcon from 'material-ui/FontIcon';
 
 const styles = {

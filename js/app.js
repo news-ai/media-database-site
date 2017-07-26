@@ -34,16 +34,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import configureStore from './configureStore';
-import {
-  BrowserRouter as Router,
-  Route,
-  Link
-} from 'react-router-dom';
-import PrivateRoute from './PrivateRoute';
+import Route from 'react-router/lib/Route';
+import IndexRoute from 'react-router/lib/IndexRoute';
+import Router from 'react-router/lib/Router';
+import browserHistory from 'react-router/lib/browserHistory';
 
 // Import the pages
 import App from 'components/App';
 import Contacts from 'components/Contacts/Contacts';
+import Contact from 'components/Contacts/Contact';
 
 import MultiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -72,17 +71,22 @@ if (module.hot) {
   });
 }
 
+const PlaceholderHome = () => <div>Placeholder Home</div>;
+
 const Base = () => (
   <MultiThemeProvider>
     <Provider store={store}>
-      <Router>
-        <div>
-          <Route exact path='/' component={App} />
-          <PrivateRoute path='/contacts' component={Contacts} />
-        </div>
+      <Router onUpdate={() => window.scrollTo(0, 0)} history={browserHistory}>
+        <Route path='/' name='Home' component={App}>
+          <IndexRoute component={PlaceholderHome} />
+          <Route path='contacts' name='Contacts'>
+            <IndexRoute component={Contacts} />
+            <Route path='contact' component={Contact} />
+          </Route>
+        </Route>
       </Router>
-      </Provider>
-    </MultiThemeProvider>
+    </Provider>
+  </MultiThemeProvider>
   );
 
 ReactDOM.render(

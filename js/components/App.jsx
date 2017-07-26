@@ -27,7 +27,7 @@ class App extends Component {
     if (props.isLogin) {
       renderNode = <div>You don't have access to NewsAI Media Database solution. Get access here.</div>;
       if (props.person.mediadatabaseaccess) {
-        renderNode = <Home />;
+        renderNode = this.props.children;
       }
     }
 

@@ -15,7 +15,6 @@ export const fetchPlaceholderContacts = (action$, {getState}) =>
       Observable.from(api.get(`/database-contacts`))
       .map(response => {
         const res = normalize(response.data, contactListSchema);
-        console.log(res);
         return {type: contactConstant.RECEIVE_MULTIPLE, ids: res.result, contacts: res.entities.contacts};
       })
       .catch(err => ({type: contactConstant.REQUEST_MULTIPLE_FAIL, message: err}))

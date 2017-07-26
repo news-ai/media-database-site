@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Route} from 'react-router-dom';
-import Contact from './Contact';
-import queryString from 'query-string';
+import Link from 'react-router/lib/Link';
 
 class Contacts extends Component {
   constructor(props) {
@@ -17,7 +15,16 @@ class Contacts extends Component {
     const {isReceiving, contacts} = this.props;
 
     return isReceiving || !contacts ? <div>LOADING</div> : (
-    <div>CONTACTS</div>
+    <div>
+      {contacts.map(contact =>
+        <Link style={{display: 'block'}} to={{
+          pathname: `/contacts/contact`,
+          search: `?email=${contact.email}`,
+        }}>
+        {contact.email}
+        </Link>
+      )}
+    </div>
     );
   }
 }
@@ -33,13 +40,4 @@ const ContactsContainer = connect(
   })
   )(Contacts);
 
-const ContactsRouteContainer = ({match, location}) => {
-  const query = queryString.parse(location.search);
-  return (
-    <div>
-      <Route path='/contacts' component={query.email ? Contact : ContactsContainer} />
-    </div>
-    );
-};
-
-export default ContactsRouteContainer;
+export default ContactsContainer;
