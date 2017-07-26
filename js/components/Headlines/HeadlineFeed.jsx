@@ -35,7 +35,7 @@ class HeadlineFeed extends Component {
   }
 
   render() {
-    const {headlines, fetchHeadlines} = this.props;
+    const {headlines, fetchHeadlines, height} = this.props;
     return (
       <AutoSizer disableHeight>
       {({width}) => (
@@ -43,7 +43,7 @@ class HeadlineFeed extends Component {
         ref={ref => this._HeadlineFeed = ref}
         deferredMeasurementCache={this._cache}
         width={width}
-        height={500}
+        height={height || 500}
         rowCount={headlines.length}
         rowHeight={this._cache.rowHeight}
         rowRenderer={this.rowRenderer}

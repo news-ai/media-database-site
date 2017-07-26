@@ -54,10 +54,13 @@ class Contact extends Component {
         <div className='large-8 medium-10 small-12 columns' >
           <ContactView {...contact} />
           <div style={{padding: '10px 0', backgroundColor: lightBlue50}} >
-            <span style={{color: grey700, marginLeft: 10}} >Tweets from {contact.contactInfo.givenName}</span>
+            <span style={{color: grey700, marginLeft: 10}} >Recent Headlines</span>
           </div>
-          <TweetFeed email={email} />
-          <HeadlineFeed email={email} />
+          <HeadlineFeed height={350} email={email} />
+          <div style={{padding: '10px 0', backgroundColor: lightBlue50}} >
+            <span style={{color: grey700, marginLeft: 10}} >Tweets</span>
+          </div>
+          <TweetFeed height={350} email={email} />
         </div>
       </div>
       );

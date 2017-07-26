@@ -36,7 +36,7 @@ class TweetFeed extends Component {
   }
 
   render() {
-    const {tweets, fetchTweets} = this.props;
+    const {tweets, fetchTweets, height} = this.props;
     return (
       <AutoSizer disableHeight>
       {({width}) => (
@@ -44,7 +44,7 @@ class TweetFeed extends Component {
         ref={ref => this._TweetFeed = ref}
         deferredMeasurementCache={this._cache}
         width={width}
-        height={500}
+        height={height || 500}
         rowCount={tweets.length}
         rowHeight={this._cache.rowHeight}
         rowRenderer={this.rowRenderer}

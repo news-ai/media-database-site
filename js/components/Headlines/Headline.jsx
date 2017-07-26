@@ -1,5 +1,6 @@
 import React from 'react';
 import {grey600, grey800} from 'material-ui/styles/colors';
+import {Link} from 'react-router-dom';
 import isURL from 'validator/lib/isURL';
 
 const defaultStyle = {
@@ -15,7 +16,9 @@ const defaultStyle = {
 const styles = {
   label: {color: grey600},
   urlSpan: {color: grey800},
-  timestring: {marginLeft: 8}
+  timestring: {marginLeft: 8, color: grey600},
+  summary: {textDecoration: 'none'},
+  timestringContainer: {marginTop: 10}
 };
 
 const Headline = ({style, title, author, url, categories, createdat, summary, feedurl, publicationid}) => {
@@ -30,10 +33,15 @@ const Headline = ({style, title, author, url, categories, createdat, summary, fe
         </span>
       </div>
       <div className='large-12 medium-12 small-12 columns'>
-        {summary}
+        <a style={styles.summary} href={url} target='_blank' rel='noreferrer'>
+        {title}
+        </a>
       </div>
-      <div className='large-12 medium-12 small-12 columns smalltext'>
-        <span>{date.toDateString()}</span><span style={styles.timestring}>{date.toTimeString()}</span>
+      <div className='large-12 medium-12 small-12 columns'>
+        <span className='text'>{summary}</span>
+      </div>
+      <div style={styles.timestringContainer} className='large-12 medium-12 small-12 columns smalltext'>
+        <span style={styles.label} >{date.toDateString()}</span><span style={styles.timestring}>{date.toTimeString()}</span>
       </div>
     </div>);
 };
