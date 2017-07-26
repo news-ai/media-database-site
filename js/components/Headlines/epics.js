@@ -19,7 +19,7 @@ export const fetchContactHeadlines = (action$, {getState}) =>
     const OFFSET = get(getState(), `headlineReducer[${email}].offset`, 0);
     return Observable.merge(
       Observable.of({type: headlineConstant.REQUEST_MULTIPLE, email}),
-      Observable.fromPromise(api.get(`/database-contacts/${email}/headlines?limit=${PAGE_LIMIT}&offset=${OFFSET}`))
+      Observable.from(api.get(`/database-contacts/${email}/headlines?limit=${PAGE_LIMIT}&offset=${OFFSET}`))
       .map(response => {
         const res = normalize(response.data, headlineListSchema);
         return ({
@@ -31,7 +31,7 @@ export const fetchContactHeadlines = (action$, {getState}) =>
         });
       })
     )
-    .catch(err => ({type: headlineConstant.REQUEST_MULTIPLE_FAIL, message: err}))
+    .catch(err => Observable.of({type: headlineConstant.REQUEST_MULTIPLE_FAIL, message: err}));
   })
   .takeUntil(action$.ofType(headlineConstant.REQUEST_ABORT));
 

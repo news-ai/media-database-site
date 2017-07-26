@@ -4,6 +4,7 @@
   "description": "Media Database for NewsAI data",
   "dependencies": {
     "alertifyjs": "^1.10.0",
+    "axios": "^0.16.2",
     "classnames": "^2.2.5",
     "draft-convert": "^1.4.3",
     "draft-js": "^0.10.0",

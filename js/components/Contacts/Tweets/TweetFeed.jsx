@@ -60,7 +60,7 @@ const mapStateToProps = (state, props) => {
   const contact = state.tweetReducer[props.email];
   return {
     tweets: contact && contact.received ? state.tweetReducer[props.email].received.map(id => state.tweetReducer[id]) : [],
-    isReceiving: contact.isReceiving
+    isReceiving: contact ? contact.isReceiving : false
   };
 };
 

@@ -29,7 +29,7 @@ export const fetchContactTweets = (action$, {getState}) =>
           offset: res.result.length < PAGE_LIMIT ? null : OFFSET + PAGE_LIMIT
         });
       })
-      .catch(err => ({type: tweetConstant.REQUEST_MULTIPLE_FAIL, message: err}))
+      .catch(err => Observable.of({type: tweetConstant.REQUEST_MULTIPLE_FAIL, message: err}))
     );
   })
   .takeUntil(action$.ofType(tweetConstant.REQUEST_ABORT));

@@ -17,14 +17,14 @@ export const fetchPlaceholderContacts = (action$, {getState}) =>
         const res = normalize(response.data, contactListSchema);
         return {type: contactConstant.RECEIVE_MULTIPLE, ids: res.result, contacts: res.entities.contacts};
       })
-      .catch(err => ({type: contactConstant.REQUEST_MULTIPLE_FAIL, message: err}))
+      .catch(err => Observable.of({type: contactConstant.REQUEST_MULTIPLE_FAIL, message: err}))
       ))
   .takeUntil(action$.ofType(contactConstant.REQUEST_MULTIPLE_ABORT));
 
 export const fetchContactProfile = action$ =>
   action$.ofType('FETCH_CONTACT_PROFILE')
   .switchMap(({email}) =>
-    Observable.onErrorResumeNext(
+    Observable.merge(
       Observable.of({type: 'FETCH_CONTACT', email}),
       Observable.of({type: 'FETCH_CONTACT_TWEETS', email}),
       Observable.of({type: 'FETCH_CONTACT_HEADLINES', email}),
@@ -43,9 +43,9 @@ export const fetchContact = (action$, {getState}) =>
   .switchMap(({email}) =>
     Observable.merge(
       Observable.of({type: contactConstant.REQUEST, email}),
-      Observable.from(api.get(`/database-contacts/${email}`))
+      Observable.fromPromise(api.get(`/database-contacts/${email}`))
       .map(response => ({type: contactConstant.RECEIVE, email, contact: response.data}))
-      .catch(err => ({type: contactConstant.REQUEST_FAIL, message: err, email}))
+      .catch(err => Observable.of({type: contactConstant.REQUEST_FAIL, message: err, email}))
       )
     )
   .takeUntil(action$.ofType(contactConstant.REQUEST_ABORT));

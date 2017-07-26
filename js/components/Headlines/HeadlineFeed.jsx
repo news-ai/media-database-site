@@ -59,7 +59,7 @@ const mapStateToProps = (state, props) => {
   const contact = state.headlineReducer[props.email];
   return {
     headlines: contact && contact.received ? state.headlineReducer[props.email].received.map(id => state.headlineReducer[id]) : [],
-    isReceiving: contact.isReceiving
+    isReceiving: contact ? contact.isReceiving : false
   };
 };
 
