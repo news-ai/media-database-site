@@ -1,7 +1,7 @@
 const assign = Object.assign || require('object-assign'); // Polyfill maybe needed for browser support
 
-export function assignToEmpty(oldObject, newObject) {
-  return assign({}, oldObject, newObject);
+export function assignToEmpty(oldObject, ...newObjects) {
+  return assign({}, oldObject, ...newObjects);
 }
 
 export function isJsonString(str) {

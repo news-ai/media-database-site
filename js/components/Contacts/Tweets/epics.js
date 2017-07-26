@@ -32,4 +32,4 @@ export const fetchContactTweets = (action$, {getState}) =>
       .catch(err => ({type: tweetConstant.REQUEST_MULTIPLE_FAIL, message: err}))
     );
   })
-  .takeUntil(action$.ofType(tweetConstant.ABORT));
+  .takeUntil(action$.ofType(tweetConstant.REQUEST_ABORT));

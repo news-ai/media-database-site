@@ -8,18 +8,6 @@ import {headlineConstant} from './constants';
 const headlineSchema = new schema.Entity('headlines', {}, {idAttribute: 'url'});
 const headlineListSchema = [headlineSchema];
 
-// export function fetchContactHeadlines(email) {
-//   return dispatch => {
-//     dispatch({type: 'CONTACT_HEADLINES_REQUEST', email});
-//     return api.get(`${window.TABULAE_API_BASE}/database-contacts/${email}/headlines`)
-//     .then(response => {
-//       const res = normalize(response, {data: arrayOf(headlineSchema)});
-//       return dispatch({type: 'CONTACT_HEADLINES_RECEIVE', ids: res.result.data, headlines: res.entities.headlines});
-//     })
-//     .catch(err => console.log(err));
-//   };
-// }
-
 const PAGE_LIMIT = 50;
 export const fetchContactHeadlines = (action$, {getState}) =>
   action$.ofType('FETCH_CONTACT_HEADLINES')
@@ -42,8 +30,8 @@ export const fetchContactHeadlines = (action$, {getState}) =>
           offset: res.result.length < PAGE_LIMIT ? null : OFFSET + PAGE_LIMIT
         });
       })
-      .catch(err => ({type: headlineConstant.REQUEST_MULTIPLE_FAIL, message: err}))
-    );
+    )
+    .catch(err => ({type: headlineConstant.REQUEST_MULTIPLE_FAIL, message: err}))
   })
-  .takeUntil(action$.ofType(headlineConstant.ABORT));
+  .takeUntil(action$.ofType(headlineConstant.REQUEST_ABORT));
 

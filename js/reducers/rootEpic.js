@@ -1,18 +1,26 @@
 import {combineEpics} from 'redux-observable';
-import {fetchPerson, setupThirdparty} from 'components/Login/epics';
-import {fetchContactTweets} from 'components/Contacts/Tweets/epics';
-import {fetchContactHeadlines} from 'components/Headlines/epics';
-import {fetchTwitterProfile} from 'components/Contacts/TwitterProfile/epics';
-import {fetchContactProfile, fetchContact} from 'components/Contacts/epics';
+// import {fetchPerson, setupThirdparty} from 'components/Login/epics';
+import * as personEpics from 'components/Login/epics';
+// import {fetchContactTweets} from 'components/Contacts/Tweets/epics';
+import * as tweetEpics from 'components/Contacts/Tweets/epics';
+// import {fetchContactHeadlines} from 'components/Headlines/epics';
+import * as headlineEpics from 'components/Headlines/epics';
+// import {fetchTwitterProfile} from 'components/Contacts/TwitterProfile/epics';
+import * as twitterProfileEpics from 'components/Contacts/TwitterProfile/epics';
+// import {fetchContactProfile, fetchContact, fetchPlaceholderContacts} from 'components/Contacts/epics';
+import * as contactEpics from 'components/Contacts/epics';
 
-const rootEpic = combineEpics(
-  fetchPerson,
-  setupThirdparty,
-  fetchTwitterProfile,
-  fetchContactTweets,
-  fetchContactProfile,
-  fetchContact,
-  fetchContactHeadlines
-  );
+const argumentObjects = [
+  personEpics,
+  tweetEpics,
+  headlineEpics,
+  twitterProfileEpics,
+  contactEpics
+];
+
+const flatten = args => Object.keys(args).map(key => args[key]);
+const argArray = argumentObjects.reduce((acc, epic) => [...acc, ...flatten(epic)], []);
+
+const rootEpic = combineEpics(...argArray);
 
 export default rootEpic;

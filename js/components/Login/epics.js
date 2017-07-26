@@ -10,7 +10,7 @@ export const fetchPerson = action$ =>
     return Observable.from(api.get('/users/me'))
     .map(response => ({type: loginConstant.RECEIVE, person: response.data}));
   })
-  .takeUntil(action$.ofType(loginConstant.ABORT));
+  .takeUntil(action$.ofType(loginConstant.REQUEST_ABORT));
 
 export const setupThirdparty = action$ =>
   action$.ofType(loginConstant.RECEIVE)

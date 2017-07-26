@@ -1,9 +1,11 @@
 export const commonTypes = [
   'REQUEST',
   'RECEIVE',
+  'REQUEST_ABORT',
   'REQUEST_FAIL',
   'REQUEST_MULTIPLE',
   'RECEIVE_MULTIPLE',
+  'REQUEST_MULTIPLE_ABORT',
   'REQUEST_MULTIPLE_FAIL',
   'PATCH',
   'PATCH_FAIL',
@@ -16,5 +18,4 @@ export const commonTypes = [
   'ADD_REQUESTED',
   'ADD_RECEIVED',
   'REDUCER_RESET',
-  'ABORT'
 ];
