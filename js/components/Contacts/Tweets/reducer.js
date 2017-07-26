@@ -33,9 +33,11 @@ function tweetReducer(state = initialState, action) {
       obj.didInvalidate = false;
       return obj;
     case tweetConstant.REQUEST_MULTIPLE_FAIL:
-      obj = assignToEmpty(state, {});
-      obj.didInvalidate = true;
-      return obj;
+      return assignToEmpty(state, {
+        didInvalidate: true,
+        isReceiving: false,
+        [action.email]: assignToEmpty(state[action.email], {didInvalidate: true, isReceiving: false})
+      });
     default:
       return state;
   }

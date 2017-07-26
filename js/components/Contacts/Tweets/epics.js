@@ -10,12 +10,13 @@ const tweetListSchema = [tweetSchema];
 const PAGE_LIMIT = 50;
 export const fetchContactTweets = (action$, {getState}) =>
   action$.ofType('FETCH_CONTACT_TWEETS')
+  .filter(({email}) => !get(getState(), `tweetReducer['${email}'].didInvalidate`))
   .filter(({email}) => {
     const contact = getState().tweetReducer[email];
     return contact ? !contact.isReceiving : true;
   })
   .switchMap(({email}) => {
-    const OFFSET = get(getState(), `tweetReducer[${email}].offset`, 0);
+    const OFFSET = get(getState(), `tweetReducer['${email}'].offset`, 0);
     return Observable.merge(
       Observable.of({type: tweetConstant.REQUEST_MULTIPLE, email}),
       Observable.fromPromise(api.get(`/database-contacts/${email}/tweets?limit=${PAGE_LIMIT}&offset=${OFFSET}`))
@@ -29,7 +30,7 @@ export const fetchContactTweets = (action$, {getState}) =>
           offset: res.result.length < PAGE_LIMIT ? null : OFFSET + PAGE_LIMIT
         });
       })
-      .catch(err => Observable.of({type: tweetConstant.REQUEST_MULTIPLE_FAIL, message: err}))
+      .catch(err => Observable.of({type: tweetConstant.REQUEST_MULTIPLE_FAIL, message: err, email}))
     );
   })
   .takeUntil(action$.ofType(tweetConstant.REQUEST_ABORT));
