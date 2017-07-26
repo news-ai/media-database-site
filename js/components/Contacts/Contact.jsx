@@ -7,7 +7,15 @@ import Tag from 'components/Tags/Tag';
 import TweetFeed from 'components/Contacts/Tweets/TweetFeed';
 import HeadlineFeed from 'components/Headlines/HeadlineFeed';
 
-const ContactView = ({contactInfo, demographics, photos, writingInformation, twitter}) => (
+const Organization = ({name, startDate, endDate, title}) =>
+  <div style={{display: 'block', marginTop: 15}} >
+    <span style={{color: grey700, fontSize: '1.1em', fontWeight: 'bold'}}>{name}</span>
+    <span style={{color: grey700, fontSize: '1em', marginLeft: 10}}>{title}</span>
+  {(startDate || endDate) &&
+    <span style={{color: grey700, fontSize: '0.9em', marginLeft: 5}}>{`(${startDate || 'unknown start date'}  -  ${endDate || 'current'})`}</span>}
+  </div>;
+
+const ContactView = ({contactInfo, demographics, photos, writingInformation, twitter, organizations}) => (
   <div>
     <div style={{padding: '20px 0'}} >
       <div className='right'>
@@ -27,6 +35,9 @@ const ContactView = ({contactInfo, demographics, photos, writingInformation, twi
         {writingInformation.beats.map(beat => <Tag key={beat} textStyle={{fontSize: '1em'}} color={lightBlue50} borderColor={blue300} hideDelete text={beat} />)}
         {writingInformation.occasionalBeats.map(beat => <Tag key={beat} textStyle={{fontSize: '1em'}} color={blue50} borderColor={blue300} hideDelete text={beat} />)}
       </div>
+  {organizations &&
+    organizations.map((org, i) =>
+      <Organization key={'org' + i} {...org} />)}
     </div>
     {writingInformation.isFreelancer && <span>Freelancing</span>}
   </div>

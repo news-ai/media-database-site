@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import {List, CellMeasurer, CellMeasurerCache, AutoSizer} from 'react-virtualized';
 import Headline from './Headline';
 import 'react-virtualized/styles.css';
+import {grey700} from 'material-ui/styles/colors';
 
 class HeadlineFeed extends Component {
   constructor(props) {
@@ -36,7 +37,7 @@ class HeadlineFeed extends Component {
 
   render() {
     const {headlines, fetchHeadlines, height} = this.props;
-    return (
+    return headlines.length > 0 ? (
       <AutoSizer disableHeight>
       {({width}) => (
         <List
@@ -51,7 +52,7 @@ class HeadlineFeed extends Component {
         />
         )}
       </AutoSizer>
-    );
+    ) : <div className='horizontal-center vertical-center' style={{height: 100, color: grey700}} >No headlines found.</div>;
   }
 }
 
