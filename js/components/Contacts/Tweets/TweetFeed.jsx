@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import {List, CellMeasurer, CellMeasurerCache, AutoSizer} from 'react-virtualized';
 import Tweet from './Tweet';
-import * as actions from './actions';
 import 'react-virtualized/styles.css';
+import {grey700} from 'material-ui/styles/colors';
 
 class TweetFeed extends Component {
   constructor(props) {
@@ -37,7 +37,7 @@ class TweetFeed extends Component {
 
   render() {
     const {tweets, fetchTweets, height} = this.props;
-    return (
+    return tweets.length > 0 ? (
       <AutoSizer disableHeight>
       {({width}) => (
         <List
@@ -52,7 +52,7 @@ class TweetFeed extends Component {
         />
         )}
       </AutoSizer>
-    );
+    ) : <div className='horizontal-center vertical-center' style={{height: 100, color: grey700}} >No tweets found.</div>;
   }
 }
 

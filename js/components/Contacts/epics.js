@@ -25,17 +25,18 @@ export const fetchContactProfile = action$ =>
   action$.ofType('FETCH_CONTACT_PROFILE')
   .switchMap(({email}) =>
     Observable.merge(
-      Observable.of({type: 'FETCH_CONTACT', email}),
+      Observable.of({type: 'FETCH_CONTACT', email, useCache: true}),
       Observable.of({type: 'FETCH_CONTACT_TWEETS', email}),
       Observable.of({type: 'FETCH_CONTACT_HEADLINES', email}),
-      Observable.of({type: 'FETCH_TWITTER_PROFILE', email})
+      Observable.of({type: 'FETCH_TWITTER_PROFILE', email, useCache: true})
       )
     )
   .takeUntil(action$.ofType('FETCH_CONTACT_PROFILE_ABORT'))
-  .catch(err => console.log(err));
+  .catch(err => Observable.of({type: 'FETCH_CONTACT_FAIL', message: err}));
 
 export const fetchContact = (action$, {getState}) =>
   action$.ofType('FETCH_CONTACT')
+  .filter(({useCache}) => !useCache)
   .filter(({email}) => {
     const contact = getState().contactReducer[email];
     return contact ? !contact.isReceiving : true;

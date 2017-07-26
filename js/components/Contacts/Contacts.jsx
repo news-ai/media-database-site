@@ -8,7 +8,7 @@ class Contacts extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchPlaceholderContacts();
+    if (this.props.contacts.length <= 1) this.props.fetchPlaceholderContacts();
   }
 
   render() {

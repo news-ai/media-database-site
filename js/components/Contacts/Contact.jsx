@@ -1,25 +1,26 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import queryString from 'query-string';
-import {lightBlue50, blue50, blue300, grey700} from 'material-ui/styles/colors';
+import {grey50, lightBlue50, blue50, blue300, grey700} from 'material-ui/styles/colors';
 import Image from './Image';
 import Tag from 'components/Tags/Tag';
 import TweetFeed from 'components/Contacts/Tweets/TweetFeed';
 import HeadlineFeed from 'components/Headlines/HeadlineFeed';
 
-const Organization = ({name, startDate, endDate, title}) =>
-  <div style={{display: 'block', marginTop: 15}} >
+const Organization = ({name, startDate, title}) =>
+  <div style={{display: 'block', margin: '10px 5px'}} >
     <span style={{color: grey700, fontSize: '1.1em', fontWeight: 'bold'}}>{name}</span>
     <span style={{color: grey700, fontSize: '1em', marginLeft: 10}}>{title}</span>
-  {(startDate || endDate) &&
-    <span style={{color: grey700, fontSize: '0.9em', marginLeft: 5}}>{`(${startDate || 'unknown start date'}  -  ${endDate || 'current'})`}</span>}
+  {startDate &&
+    <span style={{color: grey700, fontSize: '0.9em', marginLeft: 5}}>{`(started on ${startDate || 'unknown start date'})`}</span>}
   </div>;
 
 const ContactView = ({contactInfo, demographics, photos, writingInformation, twitter, organizations}) => (
   <div>
     <div style={{padding: '20px 0'}} >
       <div className='right'>
-        <Image style={{borderRadius: '50%', maxHeight: 100, maxWidth: 100}} src={photos[0].url} />
+      {photos &&
+        <Image style={{borderRadius: '50%', maxHeight: 100, maxWidth: 100}} src={photos[0].url} />}
       </div>
       <div style={{display: 'block'}} >
         <span style={{color: grey700, fontSize: '1.5em'}} >{contactInfo.fullName}</span>
@@ -36,8 +37,12 @@ const ContactView = ({contactInfo, demographics, photos, writingInformation, twi
         {writingInformation.occasionalBeats.map(beat => <Tag key={beat} textStyle={{fontSize: '1em'}} color={blue50} borderColor={blue300} hideDelete text={beat} />)}
       </div>
   {organizations &&
-    organizations.map((org, i) =>
+    <div style={{padding: 10, marginTop: 20, backgroundColor: grey50}} >
+    {organizations
+      .filter(org => org.name)
+      .map((org, i) =>
       <Organization key={'org' + i} {...org} />)}
+    </div>}
     </div>
     {writingInformation.isFreelancer && <span>Freelancing</span>}
   </div>
@@ -49,9 +54,7 @@ class Contact extends Component {
   }
 
   componentDidMount() {
-    if (!this.props.contact) {
-      this.props.fetchContactProfile();
-    }
+    this.props.fetchContactProfile();
   }
 
   render() {

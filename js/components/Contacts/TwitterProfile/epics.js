@@ -5,6 +5,7 @@ import {twitterProfileConstant} from './constants';
 
 export const fetchTwitterProfile = (action$, {getState}) =>
   action$.ofType('FETCH_TWITTER_PROFILE')
+  .filter(({useCache}) => !useCache)
   .filter(({email}) => {
     const contact = getState().twitterProfileReducer[email];
     return contact ? !contact.isReceiving : true;
@@ -13,8 +14,8 @@ export const fetchTwitterProfile = (action$, {getState}) =>
     Observable.merge(
       Observable.of({type: twitterProfileConstant.REQUEST, email}),
       Observable.from(api.get(`/database-contacts/${email}/twitterprofile`))
-      .catch(err => ({type: twitterProfileConstant.REQUEST_FAIL, message: err}))
       .map(response => ({email, type: twitterProfileConstant.RECEIVE, profile: response.data}))
+      .catch(err => Observable.of({type: twitterProfileConstant.REQUEST_FAIL, message: err}))
       )
     )
-  .takeUntil(action$.ofType('FETCH_TWITTER_PROFILE_ABORT'))
+  .takeUntil(action$.ofType('FETCH_TWITTER_PROFILE_ABORT'));
