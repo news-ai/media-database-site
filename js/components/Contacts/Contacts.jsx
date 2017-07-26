@@ -9,7 +9,7 @@ import Tag from 'components/Tags/Tag';
 import TweetFeed from 'components/Contacts/Tweets/TweetFeed';
 import HeadlineFeed from 'components/Headlines/HeadlineFeed';
 
-const ContactView = ({contactInfo, demographics, photos, writingInformation}) => (
+const ContactView = ({contactInfo, demographics, photos, writingInformation, twitter}) => (
   <div>
     <div style={{padding: '20px 0'}} >
       <div className='right'>
@@ -21,6 +21,10 @@ const ContactView = ({contactInfo, demographics, photos, writingInformation}) =>
       <div style={{display: 'block'}} >
         <span style={{color: grey700, fontSize: '1.1em'}} >{demographics.locationGeneral}</span>
       </div>
+    {twitter &&
+      <div style={{display: 'block', margin: '20px 10px'}} >
+        <span style={{color: grey700}} >{twitter.description}</span>
+      </div>}
       <div style={{display: 'block', marginTop: 20}} >
         {writingInformation.beats.map(beat => <Tag key={beat} textStyle={{fontSize: '1em'}} color={lightBlue50} borderColor={blue300} hideDelete text={beat} />)}
         {writingInformation.occasionalBeats.map(beat => <Tag key={beat} textStyle={{fontSize: '1em'}} color={blue50} borderColor={blue300} hideDelete text={beat} />)}
@@ -42,7 +46,7 @@ class Contact extends Component {
   }
 
   render() {
-    const {contact, query, email, isReceiving} = this.props;
+    const {contact, query, email, isReceiving, twitter} = this.props;
     // console.log(contact);
     // console.log(query);
     // console.log(email);
@@ -52,7 +56,7 @@ class Contact extends Component {
       renderNode = (
       <div className='row horizontal-center'>
         <div className='large-8 medium-10 small-12 columns' >
-          <ContactView {...contact} />
+          <ContactView {...contact} twitter={twitter} />
           <div style={{padding: '10px 0', backgroundColor: lightBlue50}} >
             <span style={{color: grey700, marginLeft: 10}} >Recent Headlines</span>
           </div>
@@ -74,6 +78,7 @@ const mapStateToProps = (state, props) => {
   return {
     isReceiving: state.contactReducer.isReceiving,
     contact: state.contactReducer[query.email],
+    twitter: state.twitterProfileReducer[query.email],
     email: query.email,
     query
   };
