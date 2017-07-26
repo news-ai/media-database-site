@@ -12,6 +12,7 @@ const PAGE_LIMIT = 50;
 export const fetchContactHeadlines = (action$, {getState}) =>
   action$.ofType('FETCH_CONTACT_HEADLINES')
   .filter(({email}) => !get(getState(), `headlineReducer['${email}'].didInvalidate`))
+  .filter(({email}) => get(getState(), `headlineReducer['${email}'].offset`) !== null)
   .filter(({email}) => {
     const contact = getState().headlineReducer[email];
     return contact ? !contact.isReceiving : true;

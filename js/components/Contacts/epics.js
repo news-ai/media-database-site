@@ -3,6 +3,7 @@ import 'rxjs';
 import {Observable} from 'rxjs';
 import {contactConstant} from './constants';
 import {normalize, schema} from 'normalizr';
+import has from 'lodash/has';
 const contactSchema = new schema.Entity('contacts', {}, {idAttribute: 'email'});
 const contactListSchema = [contactSchema];
 
@@ -36,7 +37,7 @@ export const fetchContactProfile = action$ =>
 
 export const fetchContact = (action$, {getState}) =>
   action$.ofType('FETCH_CONTACT')
-  .filter(({useCache}) => !useCache)
+  .filter(({email, useCache}) => useCache ? !has(getState(), `contactReducer['${email}']`) : true)
   .filter(({email}) => {
     const contact = getState().contactReducer[email];
     return contact ? !contact.isReceiving : true;

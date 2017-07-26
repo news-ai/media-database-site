@@ -11,12 +11,14 @@ const PAGE_LIMIT = 50;
 export const fetchContactTweets = (action$, {getState}) =>
   action$.ofType('FETCH_CONTACT_TWEETS')
   .filter(({email}) => !get(getState(), `tweetReducer['${email}'].didInvalidate`))
+  .filter(({email}) => get(getState(), `tweetReducer['${email}'].offset`) !== null)
   .filter(({email}) => {
     const contact = getState().tweetReducer[email];
     return contact ? !contact.isReceiving : true;
   })
   .switchMap(({email}) => {
     const OFFSET = get(getState(), `tweetReducer['${email}'].offset`, 0);
+    console.log(OFFSET);
     return Observable.merge(
       Observable.of({type: tweetConstant.REQUEST_MULTIPLE, email}),
       Observable.fromPromise(api.get(`/database-contacts/${email}/tweets?limit=${PAGE_LIMIT}&offset=${OFFSET}`))

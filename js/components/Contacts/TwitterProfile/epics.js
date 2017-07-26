@@ -2,10 +2,11 @@ import * as api from 'actions/api';
 import 'rxjs';
 import {Observable} from 'rxjs';
 import {twitterProfileConstant} from './constants';
+import has from 'lodash/has';
 
 export const fetchTwitterProfile = (action$, {getState}) =>
   action$.ofType('FETCH_TWITTER_PROFILE')
-  .filter(({useCache}) => !useCache)
+  .filter(({email, useCache}) => useCache ? !has(getState(), `twitterProfileReducer['${email}']`) : true)
   .filter(({email}) => {
     const contact = getState().twitterProfileReducer[email];
     return contact ? !contact.isReceiving : true;

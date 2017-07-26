@@ -44,7 +44,8 @@ const ContactView = ({contactInfo, demographics, photos, writingInformation, twi
       <Organization key={'org' + i} {...org} />)}
     </div>}
     </div>
-    {writingInformation.isFreelancer && <span>Freelancing</span>}
+  {writingInformation.isFreelancer &&
+    <span>Freelancing</span>}
   </div>
   );
 
