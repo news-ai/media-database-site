@@ -7,12 +7,19 @@ import Tag from 'components/Tags/Tag';
 import TweetFeed from 'components/Contacts/Tweets/TweetFeed';
 import HeadlineFeed from 'components/Headlines/HeadlineFeed';
 
+const orgStyles = {
+  container: {display: 'block', margin: '10px 5px'},
+  name: {color: grey700, fontSize: '1.1em', fontWeight: 'bold'},
+  title: {color: grey700, fontSize: '1em', marginLeft: 10},
+  startDate: {color: grey700, fontSize: '0.9em', marginLeft: 5}
+};
+
 const Organization = ({name, startDate, title}) =>
-  <div style={{display: 'block', margin: '10px 5px'}} >
-    <span style={{color: grey700, fontSize: '1.1em', fontWeight: 'bold'}}>{name}</span>
-    <span style={{color: grey700, fontSize: '1em', marginLeft: 10}}>{title}</span>
+  <div style={orgStyles.container} >
+    <span style={orgStyles.name}>{name}</span>
+    <span style={orgStyles.title}>{title}</span>
   {startDate &&
-    <span style={{color: grey700, fontSize: '0.9em', marginLeft: 5}}>{`(started on ${startDate || 'unknown start date'})`}</span>}
+    <span style={orgStyles.startDate}>{`(started on ${startDate || 'unknown start date'})`}</span>}
   </div>;
 
 const ContactView = ({contactInfo, demographics, photos, writingInformation, twitter, organizations}) => (
@@ -33,16 +40,17 @@ const ContactView = ({contactInfo, demographics, photos, writingInformation, twi
         <span style={{color: grey700}} >{twitter.description}</span>
       </div>}
       <div style={{display: 'block', marginTop: 20}} >
+        <label>Beat</label>
         {writingInformation.beats.map(beat => <Tag key={beat} textStyle={{fontSize: '1em'}} color={lightBlue50} borderColor={blue300} hideDelete text={beat} />)}
         {writingInformation.occasionalBeats.map(beat => <Tag key={beat} textStyle={{fontSize: '1em'}} color={blue50} borderColor={blue300} hideDelete text={beat} />)}
       </div>
-  {organizations &&
-    <div style={{padding: 10, marginTop: 20, backgroundColor: grey50}} >
-    {organizations
-      .filter(org => org.name)
-      .map((org, i) =>
-      <Organization key={'org' + i} {...org} />)}
-    </div>}
+    {organizations &&
+      <div style={{padding: 10, marginTop: 20, backgroundColor: grey50}} >
+      {organizations
+        .filter(org => org.name)
+        .map((org, i) =>
+        <Organization key={`org-${i}`} {...org} />)}
+      </div>}
     </div>
   {writingInformation.isFreelancer &&
     <span>Freelancing</span>}

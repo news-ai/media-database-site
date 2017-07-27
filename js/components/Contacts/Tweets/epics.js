@@ -18,7 +18,6 @@ export const fetchContactTweets = (action$, {getState}) =>
   })
   .switchMap(({email}) => {
     const OFFSET = get(getState(), `tweetReducer['${email}'].offset`, 0);
-    console.log(OFFSET);
     return Observable.merge(
       Observable.of({type: tweetConstant.REQUEST_MULTIPLE, email}),
       Observable.fromPromise(api.get(`/database-contacts/${email}/tweets?limit=${PAGE_LIMIT}&offset=${OFFSET}`))
