@@ -6,6 +6,7 @@ import Image from './Image';
 import Tag from 'components/Tags/Tag';
 import TweetFeed from 'components/Contacts/Tweets/TweetFeed';
 import HeadlineFeed from 'components/Headlines/HeadlineFeed';
+import isURL from 'validator/lib/isURL';
 
 const orgStyles = {
   container: {display: 'block', margin: '10px 5px'},
@@ -37,10 +38,14 @@ const ContactView = ({contactInfo, demographics, photos, writingInformation, twi
       </div>
     {twitter &&
       <div style={{display: 'block', margin: '20px 10px'}} >
-        <span style={{color: grey700}} >{twitter.description}</span>
+        <label style={{color: grey700}} >Twitter Description</label>
+        <span className='text' style={{color: grey700}} >
+        {twitter.description && twitter.description.split(' ').map((block, i) =>
+          isURL(block) ? <a key={`block-${i}`} href={block} rel='noreferrer' target='_blank'>{block} </a> : `${block} `)}
+        </span>
       </div>}
       <div style={{display: 'block', marginTop: 20}} >
-        <label>Beat</label>
+        <label>Beat(s)</label>
         {writingInformation.beats.map(beat => <Tag key={beat} textStyle={{fontSize: '1em'}} color={lightBlue50} borderColor={blue300} hideDelete text={beat} />)}
         {writingInformation.occasionalBeats.map(beat => <Tag key={beat} textStyle={{fontSize: '1em'}} color={blue50} borderColor={blue300} hideDelete text={beat} />)}
       </div>
