@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import queryString from 'query-string';
-import {grey50, lightBlue50, blue50, blue300, grey700} from 'material-ui/styles/colors';
+import {grey50, lightBlue50, blue50, blue300, grey700, grey900} from 'material-ui/styles/colors';
 import Image from './Image';
 import Tag from 'components/Tags/Tag';
 import TweetFeed from 'components/Contacts/Tweets/TweetFeed';
 import HeadlineFeed from 'components/Headlines/HeadlineFeed';
 import isURL from 'validator/lib/isURL';
+import FontIcon from 'material-ui/FontIcon';
 
 const orgStyles = {
   container: {display: 'block', margin: '10px 5px'},
@@ -23,7 +24,7 @@ const Organization = ({name, startDate, title}) =>
     <span style={orgStyles.startDate}>{`(started on ${startDate || 'unknown start date'})`}</span>}
   </div>;
 
-const ContactView = ({contactInfo, demographics, photos, writingInformation, twitter, organizations}) => (
+const ContactView = ({contactInfo, demographics, photos, writingInformation, twitter, organizations, socialProfiles}) => (
   <div>
     <div style={{padding: '20px 0'}} >
       <div className='right'>
@@ -51,10 +52,25 @@ const ContactView = ({contactInfo, demographics, photos, writingInformation, twi
       </div>
     {organizations &&
       <div style={{padding: 10, marginTop: 20, backgroundColor: grey50}} >
+      <label>Positions</label>
       {organizations
         .filter(org => org.name)
         .map((org, i) =>
         <Organization key={`org-${i}`} {...org} />)}
+      </div>}
+    {socialProfiles &&
+      <div style={{padding: 10, marginTop: 20, backgroundColor: grey50}} >
+      <label>Social Profiles</label>
+      {socialProfiles.map((profile, i) =>
+        <div style={{margin: '0 8px', display: 'inline-block'}}>
+          <a className='text' href={profile.url} target='_blank' rel='noreferrer'>
+            <FontIcon color={grey700} hoverColor={grey900} style={{fontSize: '0.9em', margin: '0 5px'}} className={`fa fa-${profile.type}`} />
+            <span className='text hoverGrey700to900' >
+            {profile.typeName}
+            </span>
+          </a>
+        </div>
+        )}
       </div>}
     </div>
   {writingInformation.isFreelancer &&

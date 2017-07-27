@@ -55,6 +55,18 @@
   color: #212121;
 }
 
+.hoverGrey700to900 {
+  color: #616161;
+}
+
+.hoverGrey700to900:hover {
+  color: #212121;
+}
+
+.hoverGrey900:hover {
+  color: #212121;
+}
+
 .truncate-ellipsis {
   display: table;
   table-layout: fixed;
