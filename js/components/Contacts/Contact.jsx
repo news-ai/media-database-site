@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import queryString from 'query-string';
-import {grey50, lightBlue50, blue50, blue300, grey700, grey900} from 'material-ui/styles/colors';
+import {grey50, blueGrey50, lightBlue50, blue50, blue300, grey700, grey900} from 'material-ui/styles/colors';
 import Image from './Image';
 import Tag from 'components/Tags/Tag';
 import TweetFeed from 'components/Contacts/Tweets/TweetFeed';
@@ -96,8 +96,8 @@ class Contact extends Component {
     if (isReceiving) renderNode = <div>LOADING...</div>;
     if (contact && !isReceiving) {
       renderNode = (
-      <div className='row horizontal-center'>
-        <div className='large-8 medium-10 small-12 columns' >
+      <div style={{backgroundColor: blueGrey50}} className='row horizontal-center'>
+        <div style={{backgroundColor: '#ffffff'}} className='large-8 medium-10 small-12 columns' >
           <ContactView {...contact} twitter={twitter} />
           <div style={{padding: '10px 0', backgroundColor: lightBlue50}} >
             <span style={{color: grey700, marginLeft: 10}} >Recent Headlines</span>

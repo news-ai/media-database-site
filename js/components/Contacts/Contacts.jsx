@@ -3,14 +3,15 @@ import {connect} from 'react-redux';
 import Link from 'react-router/lib/Link';
 import Tag from 'components/Tags/Tag';
 import Image from './Image';
-import {grey50, lightBlue50, lightBlue300, blue50, blue300, grey700} from 'material-ui/styles/colors';
+import {grey50, blueGrey50, lightBlue50, lightBlue300, blue50, blue300, grey700} from 'material-ui/styles/colors';
 
 const ListItem = ({email, contactInfo, demographics, writingInformation, organizations, photos}) => (
   <div className='row' style={{
-    margin: '5px 5px',
-    padding: 5,
+    margin: '7px 5px',
+    padding: 3,
     borderBottom: `3px solid ${lightBlue300}`,
-    borderLeft: `3px solid ${lightBlue300}`
+    borderLeft: `3px solid ${lightBlue300}`,
+    backgroundColor: '#ffffff'
   }} >
     <div className='large-10 medium-9 small-8'>
       <div className='row' style={{paddingLeft: 10}} >
@@ -27,8 +28,10 @@ const ListItem = ({email, contactInfo, demographics, writingInformation, organiz
         </div>
         <div className='large-12 medium-12 small-12 columns vertical-center'>
           <label style={{color: grey700}}>Beat(s)</label>
-          {writingInformation.beats.map(beat => <Tag key={beat} color={lightBlue50} borderColor={blue300} hideDelete text={beat} />)}
-          {writingInformation.occasionalBeats.map(beat => <Tag key={beat} color={blue50} borderColor={blue300} hideDelete text={beat} />)}
+          {writingInformation.beats.map(beat =>
+            <Tag key={beat} color={lightBlue50} borderColor={blue300} hideDelete text={beat} />)}
+          {writingInformation.occasionalBeats.map(beat =>
+            <Tag key={beat} color={blue50} borderColor={blue300} hideDelete text={beat} />)}
         </div>
       </div>
     </div>
@@ -38,7 +41,7 @@ const ListItem = ({email, contactInfo, demographics, writingInformation, organiz
         pathname: `/contacts/contact`,
         search: `?email=${email}`,
       }}>
-        <Image style={{borderRadius: '2%', maxHeight: 100, maxWidth: 100}} src={photos[0].url} />
+        <Image style={{borderRadius: '4%', maxHeight: 90, maxWidth: 90}} src={photos[0].url} />
       </Link>}
     </div>
   </div>
@@ -57,7 +60,7 @@ class Contacts extends Component {
     const {isReceiving, contacts} = this.props;
 
     return isReceiving || !contacts ? <div>LOADING</div> : (
-    <div className='row horizontal-center'>
+    <div style={{backgroundColor: blueGrey50}} className='row horizontal-center'>
       <div className='large-8 medum-10 small-12 columns'>
       {contacts.map(contact => <ListItem key={contact.email} {...contact} />)}
       </div>

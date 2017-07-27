@@ -38,7 +38,7 @@ const Tweet = ({style, text, username, createdat, tweetidstr}) => {
         .split(' ')
         .map((block, i) => <a key={`${tweetidstr}-${i}`} style={styles.urlSpan} target='_blank' href={isURL(block) ? block : `https://twitter.com/statuses/${tweetidstr}`}>{block} </a>)}
       </div>
-      <div className='large-12 medium-12 small-12 columns smalltext'>
+      <div style={{marginTop: 10}} className='large-12 medium-12 small-12 columns smalltext'>
         <span style={styles.timestring} >{dateObj.local().format(FORMAT)}</span>
       </div>
     </div>);

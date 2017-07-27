@@ -43,6 +43,7 @@ import browserHistory from 'react-router/lib/browserHistory';
 import App from 'components/App';
 import Contacts from 'components/Contacts/Contacts';
 import Contact from 'components/Contacts/Contact';
+import Home from 'components/Home/Home';
 
 import MultiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -71,14 +72,12 @@ if (module.hot) {
   });
 }
 
-const PlaceholderHome = () => <div>Placeholder Home</div>;
-
 const Base = () => (
   <MultiThemeProvider>
     <Provider store={store}>
       <Router onUpdate={() => window.scrollTo(0, 0)} history={browserHistory}>
         <Route path='/' name='Home' component={App}>
-          <IndexRoute component={PlaceholderHome} />
+          <IndexRoute component={Home} />
           <Route path='contacts' name='Contacts'>
             <IndexRoute component={Contacts} />
             <Route path='contact' component={Contact} />
