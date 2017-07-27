@@ -13,32 +13,33 @@ const ListItem = ({email, contactInfo, demographics, writingInformation, organiz
     borderLeft: `3px solid ${lightBlue300}`
   }} >
     <div className='large-10 medium-9 small-8'>
-      <div className='row'>
+      <div className='row' style={{paddingLeft: 10}} >
         <div className='large-12 medium-12 small-12 columns'>
-          {contactInfo.fullName}
-        </div>
-        <div className='large-12 medium-12 small-12 columns'>
-          {demographics.locationGeneral}
-        </div>
-
-        <div className='large-12 medium-12 small-12 columns vertical-center'>
-          <label>Beat(s)</label>
-          {writingInformation.beats.map(beat => <Tag key={beat} color={lightBlue50} borderColor={blue300} hideDelete text={beat} />)}
-          {writingInformation.occasionalBeats.map(beat => <Tag key={beat} color={blue50} borderColor={blue300} hideDelete text={beat} />)}
-        </div>
-        <div className='large-12 medium-12 small-12 columns'>
-          <Link to={{
+          <Link style={{color: grey700, fontWeight: 'bold'}} to={{
             pathname: `/contacts/contact`,
             search: `?email=${email}`,
           }}>
-          {email}
+          {contactInfo.fullName}
           </Link>
+        </div>
+        <div className='large-12 medium-12 small-12 columns'>
+          <span style={{color: grey700}} className='text'>{demographics.locationGeneral}</span>
+        </div>
+        <div className='large-12 medium-12 small-12 columns vertical-center'>
+          <label style={{color: grey700}}>Beat(s)</label>
+          {writingInformation.beats.map(beat => <Tag key={beat} color={lightBlue50} borderColor={blue300} hideDelete text={beat} />)}
+          {writingInformation.occasionalBeats.map(beat => <Tag key={beat} color={blue50} borderColor={blue300} hideDelete text={beat} />)}
         </div>
       </div>
     </div>
     <div className='large-2 medium-3 small-4 vertical-center horizontal-center'>
     {photos &&
-      <Image style={{borderRadius: '50%', maxHeight: 100, maxWidth: 100}} src={photos[0].url} />}
+      <Link to={{
+        pathname: `/contacts/contact`,
+        search: `?email=${email}`,
+      }}>
+        <Image style={{borderRadius: '2%', maxHeight: 100, maxWidth: 100}} src={photos[0].url} />
+      </Link>}
     </div>
   </div>
   );
