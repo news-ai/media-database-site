@@ -5,7 +5,6 @@ import {actions as loginActions} from 'components/Login';
 import {loginConstant} from 'components/Login/constants';
 
 import Login from './Login';
-import Home from './Home/Home.jsx';
 
 
 class App extends Component {

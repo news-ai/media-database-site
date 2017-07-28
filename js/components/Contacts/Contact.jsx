@@ -34,22 +34,22 @@ const ContactView = ({contactInfo, demographics, photos, writingInformation, twi
       <div style={{display: 'block'}} >
         <span style={{color: grey700, fontSize: '1.5em'}} >{contactInfo.fullName}</span>
       </div>
-      <div style={{display: 'block'}} >
+      <div style={{display: 'block', marginTop: 20}} >
+        <label>Beat(s)</label>
+        {writingInformation.beats.map(beat => <Tag key={beat} textStyle={{fontSize: '1em'}} color={lightBlue50} borderColor={blue300} hideDelete text={beat} />)}
+        {writingInformation.occasionalBeats.map(beat => <Tag key={beat} textStyle={{fontSize: '1em'}} color={blue50} borderColor={blue300} hideDelete text={beat} />)}
+      </div>
+      <div className='right' style={{display: 'block'}} >
         <span style={{color: grey700, fontSize: '1.1em'}} >{demographics.locationGeneral}</span>
       </div>
     {twitter &&
-      <div style={{display: 'block', margin: '20px 10px'}} >
+      <div style={{display: 'block', margin: '15px 10px'}} >
         <label style={{color: grey700}} >Twitter Description</label>
         <span className='text' style={{color: grey700}} >
         {twitter.description && twitter.description.split(' ').map((block, i) =>
           isURL(block) ? <a key={`block-${i}`} href={block} rel='noreferrer' target='_blank'>{block} </a> : `${block} `)}
         </span>
       </div>}
-      <div style={{display: 'block', marginTop: 20}} >
-        <label>Beat(s)</label>
-        {writingInformation.beats.map(beat => <Tag key={beat} textStyle={{fontSize: '1em'}} color={lightBlue50} borderColor={blue300} hideDelete text={beat} />)}
-        {writingInformation.occasionalBeats.map(beat => <Tag key={beat} textStyle={{fontSize: '1em'}} color={blue50} borderColor={blue300} hideDelete text={beat} />)}
-      </div>
     {organizations &&
       <div style={{padding: 10, marginTop: 20, backgroundColor: grey50}} >
       <label>Positions</label>

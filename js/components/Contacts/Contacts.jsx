@@ -3,18 +3,24 @@ import {connect} from 'react-redux';
 import Link from 'react-router/lib/Link';
 import Tag from 'components/Tags/Tag';
 import Image from './Image';
-import {grey50, blueGrey50, lightBlue50, lightBlue300, blue50, blue300, grey700} from 'material-ui/styles/colors';
+import {grey50, blueGrey50, blueGrey300, lightBlue50, lightBlue300, blue50, blue300, grey700} from 'material-ui/styles/colors';
 
 const ListItem = ({email, contactInfo, demographics, writingInformation, organizations, photos}) => (
   <div className='row' style={{
     margin: '7px 5px',
     padding: 3,
-    borderBottom: `3px solid ${lightBlue300}`,
+    borderBottom: `3px solid ${blueGrey300}`,
     borderLeft: `3px solid ${lightBlue300}`,
     backgroundColor: '#ffffff'
   }} >
     <div className='large-10 medium-9 small-8'>
       <div className='row' style={{paddingLeft: 10}} >
+        <div className='large-12 medium-12 small-12 columns'>
+        {organizations &&
+          <span>{organizations[0].name}</span>}
+        {organizations && organizations[0].name &&
+          <span className='text' style={{marginLeft: 10, color: grey700}} >{organizations[0].title}</span>}
+        </div>
         <div className='large-12 medium-12 small-12 columns'>
           <Link style={{color: grey700, fontWeight: 'bold'}} to={{
             pathname: `/contacts/contact`,
@@ -62,7 +68,8 @@ class Contacts extends Component {
     return isReceiving || !contacts ? <div>LOADING</div> : (
     <div style={{backgroundColor: blueGrey50}} className='row horizontal-center'>
       <div className='large-8 medum-10 small-12 columns'>
-      {contacts.map(contact => <ListItem key={contact.email} {...contact} />)}
+      {contacts.map(contact =>
+        <ListItem key={contact.email} {...contact} />)}
       </div>
     </div>
     );
