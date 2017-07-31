@@ -20,7 +20,7 @@ class PublicationContainer extends Component {
       <div>
         <TextField id='publication-query-input' onChange={this.onChange} />
         {publications && publications.map((pub, i) =>
-          <div key={pub.id} >{pub.id}</div>
+          <div key={pub.id} >{pub.name}</div>
           )}
       </div>
     );
