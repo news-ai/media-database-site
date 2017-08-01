@@ -4,6 +4,7 @@ import Select from 'react-select';
 import {searchConstant} from './constants';
 
 import FlatButton from 'material-ui/FlatButton';
+import isEmpty from 'lodash/isEmpty';
 
 import 'react-select/dist/react-select.css';
 
@@ -44,10 +45,11 @@ class SearchPage extends Component {
   onSubmit() {
     const isFreelancer = this.isFreelancer.checked;
     const freelancerType = this.freelancerType.checked;
-    let baseQuery = {};
+    const baseQuery = {};
     if (this.state.beats.length > 0) baseQuery.beats = this.state.beats.map(({value}) => value);
     if (freelancerType) baseQuery.isFreelancer = isFreelancer;
-    this.props.fetchSearch(baseQuery);
+
+    if (!isEmpty(baseQuery)) this.props.fetchSearch(baseQuery);
   }
 
   render() {

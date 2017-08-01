@@ -8,6 +8,7 @@ import TweetFeed from 'components/Contacts/Tweets/TweetFeed';
 import HeadlineFeed from 'components/Headlines/HeadlineFeed';
 import isURL from 'validator/lib/isURL';
 import FontIcon from 'material-ui/FontIcon';
+import escape from 'lodash/escape';
 
 const orgStyles = {
   container: {display: 'block', margin: '10px 5px'},
@@ -23,6 +24,39 @@ const Organization = ({name, startDate, title}) =>
   {startDate &&
     <span style={orgStyles.startDate}>{`(started on ${startDate || 'unknown start date'})`}</span>}
   </div>;
+
+class SocialProfiles extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {hoverTarget: null};
+  }
+
+  render() {
+    const {socialProfiles} = this.props;
+    const {hoverTarget} = this.state;
+    return (
+      <div style={{padding: 10, marginTop: 20, backgroundColor: grey50}} >
+        <div style={{marginBottom: 5}} >
+          <span className='text' >Social Profiles</span>
+          <span className='text right' style={{color: grey700}} >hover to see bio (if it has one)</span>
+        </div>
+      {socialProfiles.map((profile, i) =>
+        <div
+        onMouseEnter={e => this.setState({hoverTarget: profile})}
+        onMouseLeave={e => this.setState({hoverTarget: null})}
+        style={{margin: '0 8px', display: 'inline-block'}}
+        >
+          <a className='text' href={profile.url} target='_blank' rel='noreferrer'>
+            <FontIcon color={grey700} hoverColor={grey900} style={{fontSize: '0.9em', margin: '0 5px'}} className={`fa fa-${profile.type}`} />
+            <span className='hoverGrey700to900' >{profile.typeName}</span>
+          </a>
+        </div>)}
+      {hoverTarget !== null && hoverTarget.bio &&
+        <p style={{margin: 10}} className='text'>{hoverTarget.bio.replace(/(<([^>]+)>)/ig, ' ')}</p>}
+      </div>
+      );
+  }
+}
 
 const ContactView = ({contactInfo, demographics, photos, writingInformation, twitter, organizations, socialProfiles}) => (
   <div>
@@ -59,19 +93,7 @@ const ContactView = ({contactInfo, demographics, photos, writingInformation, twi
         <Organization key={`org-${i}`} {...org} />)}
       </div>}
     {socialProfiles &&
-      <div style={{padding: 10, marginTop: 20, backgroundColor: grey50}} >
-      <label>Social Profiles</label>
-      {socialProfiles.map((profile, i) =>
-        <div style={{margin: '0 8px', display: 'inline-block'}}>
-          <a className='text' href={profile.url} target='_blank' rel='noreferrer'>
-            <FontIcon color={grey700} hoverColor={grey900} style={{fontSize: '0.9em', margin: '0 5px'}} className={`fa fa-${profile.type}`} />
-            <span className='text hoverGrey700to900' >
-            {profile.typeName}
-            </span>
-          </a>
-        </div>
-        )}
-      </div>}
+      <SocialProfiles socialProfiles={socialProfiles} />}
     </div>
   {writingInformation.isFreelancer &&
     <span>Freelancing</span>}
