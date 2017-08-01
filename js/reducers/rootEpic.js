@@ -10,6 +10,7 @@ import * as twitterProfileEpics from 'components/Contacts/TwitterProfile/epics';
 // import {fetchContactProfile, fetchContact, fetchPlaceholderContacts} from 'components/Contacts/epics';
 import * as contactEpics from 'components/Contacts/epics';
 import * as publicationEpics from 'components/Publications/epics';
+import * as searchEpics from 'components/Search/epics';
 
 const argumentObjects = [
   personEpics,
@@ -17,7 +18,8 @@ const argumentObjects = [
   headlineEpics,
   twitterProfileEpics,
   contactEpics,
-  publicationEpics
+  publicationEpics,
+  searchEpics
 ];
 
 const flatten = args => Object.keys(args).map(key => args[key]);

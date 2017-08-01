@@ -20,14 +20,25 @@ export function deleteRequest(endpoint) {
 }
 
 export function post(endpoint, body) {
-  return fetch(`${window.TABULAE_API_BASE}${endpoint}`, {
-    method: 'POST',
-    credentials: 'include',
-    body: JSON.stringify(body)
+  console.log(`${window.TABULAE_API_BASE}${endpoint}`);
+  return axios({
+    method: 'post',
+    url: `${window.TABULAE_API_BASE}${endpoint}`,
+    withCredentials: true,
+    data: JSON.stringify(body)
   })
-    .then(response => response.status === 200 ? response.text() : Promise.reject(response))
-    .then(text => JSON.parse(text));
+  .then(response => response.status === 200 ? Promise.resolve(response.data) : Promise.reject(response));
 }
+
+// export function post(endpoint, body) {
+//   return fetch(`${window.TABULAE_API_BASE}${endpoint}`, {
+//     method: 'POST',
+//     credentials: 'include',
+//     body: JSON.stringify(body)
+//   })
+//     .then(response => response.status === 200 ? response.text() : Promise.reject(response))
+//     .then(text => JSON.parse(text));
+// }
 
 export function postFile(endpoint, file) {
   return fetch(`${window.TABULAE_API_BASE}${endpoint}`, {
