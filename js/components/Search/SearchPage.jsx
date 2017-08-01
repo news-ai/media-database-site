@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import Select from 'react-select';
-import FlatButton from 'material-ui/FlatButton';
 import {searchConstant} from './constants';
+
+import FlatButton from 'material-ui/FlatButton';
 
 import 'react-select/dist/react-select.css';
 
@@ -41,9 +42,12 @@ class SearchPage extends Component {
   }
 
   onSubmit() {
-    this.props.fetchSearch({
-      beats: this.state.beats.map(({value}) => value),
-    });
+    const isFreelancer = this.isFreelancer.checked;
+    const freelancerType = this.freelancerType.checked;
+    let baseQuery = {};
+    if (this.state.beats.length > 0) baseQuery.beats = this.state.beats.map(({value}) => value);
+    if (freelancerType) baseQuery.isFreelancer = isFreelancer;
+    this.props.fetchSearch(baseQuery);
   }
 
   render() {
@@ -57,7 +61,13 @@ class SearchPage extends Component {
         options={beatOptions}
         onChange={beats => this.setState({beats})}
         />
-        <FlatButton label='Submit' onClick={this.onSubmit} />
+        <label>Specify Freelancer Type</label>
+        <input type='checkbox' ref={ref => this.freelancerType = ref} />
+        <label>Is a Freelancer?</label>
+        <input type='checkbox' ref={ref => this.isFreelancer = ref} />
+        <div>
+          <FlatButton label='Submit' onClick={this.onSubmit} />
+        </div>
       </div>
     );
   }

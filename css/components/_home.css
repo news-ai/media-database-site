@@ -164,3 +164,7 @@ input {
 .hovergray:hover {
   background-color: #FAFAFA;
 }
+
+.Select-menu-outer {
+  z-index: 1000;
+}
