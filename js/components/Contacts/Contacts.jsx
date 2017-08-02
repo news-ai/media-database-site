@@ -19,6 +19,7 @@ const ListItem = ({email, contactInfo, demographics, writingInformation, organiz
           <Link to={{
             pathname: `/contacts/contact`,
             search: `?email=${email}`,
+            // state: {cool: 'heyyyyy'} // goes to props.location.state
           }} style={{color: grey700, fontWeight: 'bold'}}>
           {contactInfo.fullName}
           </Link>
@@ -68,7 +69,7 @@ class Contacts extends Component {
   }
 
   componentDidMount() {
-    if (this.props.contacts.length <= 1) this.props.fetchPlaceholderContacts();
+    // if (this.props.contacts.length <= 1) this.props.fetchPlaceholderContacts();
   }
 
   onSelectContact(e, index) {
@@ -128,15 +129,16 @@ class Contacts extends Component {
   }
 }
 
+export default Contacts;
 
-const ContactsContainer = connect(
-  ({contactReducer}) => ({
-    isReceiving: contactReducer.isReceiving,
-    contacts: contactReducer.received.map(id => contactReducer[id])
-  }),
-  dispatch => ({
-    fetchPlaceholderContacts: _ => dispatch({type: 'FETCH_PLACEHOLDER_CONTACTS'})
-  })
-  )(Contacts);
+// const ContactsContainer = connect(
+//   ({contactReducer}) => ({
+//     isReceiving: contactReducer.isReceiving,
+//     contacts: contactReducer.received.map(id => contactReducer[id])
+//   }),
+//   dispatch => ({
+//     fetchPlaceholderContacts: _ => dispatch({type: 'FETCH_PLACEHOLDER_CONTACTS'})
+//   })
+//   )(Contacts);
 
-export default ContactsContainer;
+// export default ContactsContainer;

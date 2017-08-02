@@ -8,7 +8,6 @@ import TweetFeed from 'components/Contacts/Tweets/TweetFeed';
 import HeadlineFeed from 'components/Headlines/HeadlineFeed';
 import isURL from 'validator/lib/isURL';
 import FontIcon from 'material-ui/FontIcon';
-import escape from 'lodash/escape';
 
 const orgStyles = {
   container: {display: 'block', margin: '10px 5px'},

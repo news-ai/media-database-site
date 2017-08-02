@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
+import withRouter from 'react-router/lib/withRouter';
 import Select from 'react-select';
 import {searchConstant} from './constants';
 
 import FlatButton from 'material-ui/FlatButton';
 import isEmpty from 'lodash/isEmpty';
+import queryString from 'query-string';
 
 import 'react-select/dist/react-select.css';
 
@@ -49,10 +51,17 @@ class SearchPage extends Component {
     if (this.state.beats.length > 0) baseQuery.beats = this.state.beats.map(({value}) => value);
     if (freelancerType) baseQuery.isFreelancer = isFreelancer;
 
-    if (!isEmpty(baseQuery)) this.props.fetchSearch(baseQuery);
+    if (!isEmpty(baseQuery)) {
+      // this.props.fetchSearch(baseQuery);
+      this.props.router.push({
+        pathname: `/search`,
+        search: `?q=${JSON.stringify(baseQuery)}`
+      });
+    }
   }
 
   render() {
+    console.log(this.props);
     return (
       <div>
         <label>Beats</label>
@@ -80,4 +89,4 @@ export default connect(
   (dispatch) => ({
     fetchSearch: query => dispatch({type: searchConstant.REQUEST, query})
   })
-  )(SearchPage);
+  )(withRouter(SearchPage));

@@ -44,6 +44,7 @@ import App from 'components/App';
 import Contacts from 'components/Contacts/Contacts';
 import Contact from 'components/Contacts/Contact';
 import Home from 'components/Home/Home';
+import SearchResults from 'components/Search/SearchResults';
 
 import MultiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -82,6 +83,7 @@ const Base = () => (
             <IndexRoute component={Contacts} />
             <Route path='contact' component={Contact} />
           </Route>
+          <Route path='search' name='Search Results' component={SearchResults} />
         </Route>
       </Router>
     </Provider>
