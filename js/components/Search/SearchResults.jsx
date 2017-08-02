@@ -130,6 +130,7 @@ class SearchResults extends Component {
     console.log((page - 1) * limit);
     console.log(page * limit);
     console.log(slicedContacts);
+    console.log(isReceiving);
 
     return (
       <div style={{marginTop: 50}} >
@@ -145,8 +146,10 @@ class SearchResults extends Component {
             <option value={10}>10</option>
             <option value={20}>20</option>
             <option value={50}>50</option>
+          {/*
             <option value={100}>100</option>
             <option value={200}>200</option>
+          */}
           </select>
           <span className='text' style={styles.limit.label} >results per page</span>
         </div>
