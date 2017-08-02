@@ -20,7 +20,6 @@ export function deleteRequest(endpoint) {
 }
 
 export function post(endpoint, body) {
-  console.log(`${window.TABULAE_API_BASE}${endpoint}`);
   return axios({
     method: 'post',
     url: `${window.TABULAE_API_BASE}${endpoint}`,

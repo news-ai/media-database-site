@@ -55,7 +55,9 @@ class SearchPage extends Component {
       // this.props.fetchSearch(baseQuery);
       this.props.router.push({
         pathname: `/search`,
-        search: `?q=${JSON.stringify(baseQuery)}`
+        query: {
+          q: JSON.stringify(baseQuery)
+        }
       });
     }
   }
