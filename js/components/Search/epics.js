@@ -25,7 +25,7 @@ export const fetchSearch = (action$, {getState}) =>
   .switchMap(({query}) => {
     const formattedQuery = formatQuery(query);
     console.log(formattedQuery);
-    const OFFSET = getState().searchReducer.offset || 0;
+    const OFFSET = JSON.stringify(query) === JSON.stringify(getState().searchReducer.currentQuery) ? getState().searchReducer.offset : 0;
     return Observable.merge(
       Observable.of({type: searchConstant.REQUEST, query}),
       Observable.from(api.post(`/database-contacts/search?limit=${PAGE_LIMIT}&offset=${OFFSET}`, formattedQuery))
@@ -38,7 +38,8 @@ export const fetchSearch = (action$, {getState}) =>
             type: searchConstant.RECEIVE,
             query,
             ids: res.result,
-            offset: res.result.length < PAGE_LIMIT ? null : OFFSET + PAGE_LIMIT
+            offset: res.result.length < PAGE_LIMIT ? null : OFFSET + PAGE_LIMIT,
+            total: response.summary.total
           }
         ];
       })

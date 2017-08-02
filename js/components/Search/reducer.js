@@ -20,7 +20,8 @@ function searchReducer(state = initialState, action) {
         mostRecentReceived: action.ids,
         currentQuery: action.query,
         pastQueries: action.pastQuery ? [...state.pastQueries, assignToEmpty(action.pastQuery)] : state.pastQueries,
-        offset: action.offset
+        offset: action.offset,
+        total: action.total
       });
     case searchConstant.REQUEST_FAIL:
       return assignToEmpty(state, {
