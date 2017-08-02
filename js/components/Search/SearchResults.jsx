@@ -35,7 +35,6 @@ const beatOptions = [
   {value: 'World'},
 ];
 
-
 const styles = {
   pagesContainer: {padding: '15px 10px', margin: '30px 10px'},
   contactItemContainer: {margin: '10px 5px'},
@@ -68,6 +67,20 @@ class SearchResults extends Component {
     this.handlePageLimitChange = this.handlePageLimitChange.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    const page = this.props.page !== undefined ? this.props.page : 1;
+    const limit = this.props.limit !== undefined ? this.props.limit : 20;
+    if (nextProps.page !== page || nextProps.limit !== limit) {
+      const start = (nextProps.page - 1) * nextProps.limit;
+      const end = nextProps.page * nextProps.limit;
+      if (end > nextProps.contacts.length) {
+        console.log('FETCH MORE');
+        const query = JSON.parse(nextProps.query);
+        this.props.fetchSearch(query);
+      }
+    }
+  }
+
   handlePageLimitChange(e) {
     this.props.router.push({
       pathname: `/search`,
@@ -85,8 +98,8 @@ class SearchResults extends Component {
     const limit = this.props.limit !== undefined ? this.props.limit : 20;
 
     const slicedContacts = contacts.slice(
-      page * limit,
-      (page + 1) * limit
+      (page - 1) * limit,
+      page * limit
       );
 
     const numPages = total % limit > 0 ? Math.floor(total / limit) + 1 : Math.floor(total / limit);
@@ -105,7 +118,8 @@ class SearchResults extends Component {
           }
         }}
         style={{
-          padding: 3,
+          padding: '2px 5px',
+          margin: '0 3px',
           border: '1px solid gray',
           backgroundColor: i === page ? 'red' : '#ffffff',
           display: 'inline-block'
@@ -113,6 +127,9 @@ class SearchResults extends Component {
         );
     }
     console.log(page);
+    console.log((page - 1) * limit);
+    console.log(page * limit);
+    console.log(slicedContacts);
 
     return (
       <div style={{marginTop: 50}} >
@@ -134,7 +151,7 @@ class SearchResults extends Component {
           <span className='text' style={styles.limit.label} >results per page</span>
         </div>
         <Contacts isReceiving={isReceiving} contacts={slicedContacts} />
-        {pages}
+        <div style={{margin: '30px 0'}} className='horizontal-center'>{pages}</div>
       </div>
     );
   }
@@ -193,7 +210,6 @@ export class SearchContainer extends Component {
 
 export default connect(
   ({searchReducer, contactReducer}, {router}) => {
-    console.log(router);
     const {q, page, limit} = router.location.query;
     return {
       isReceiving: searchReducer.isReceiving,
