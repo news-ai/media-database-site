@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
-import Contacts from 'components/Contacts/Contacts';
 import withRouter from 'react-router/lib/withRouter';
 import Link from 'react-router/lib/Link';
 import queryString from 'query-string';
@@ -8,7 +7,8 @@ import Select from 'react-select';
 import isEmpty from 'lodash/isEmpty';
 import RaisedButton from 'material-ui/RaisedButton';
 import {searchConstant} from './constants';
-import {blue500, grey700, grey800} from 'material-ui/styles/colors';
+import {blue500, grey400, grey700, grey800} from 'material-ui/styles/colors';
+import ContactListItem from 'components/Contacts/ContactListItem';
 
 const beatOptions = [
   {value: 'Arts and Entertainment'},
@@ -73,7 +73,7 @@ class SearchResults extends Component {
     if (nextProps.page !== page || nextProps.limit !== limit) {
       const start = (nextProps.page - 1) * nextProps.limit;
       const end = nextProps.page * nextProps.limit;
-      if (end > nextProps.contacts.length) {
+      if (end > this.props.contacts.length) {
         console.log('FETCH MORE');
         const query = JSON.parse(nextProps.query);
         this.props.fetchSearch(query);
@@ -103,30 +103,8 @@ class SearchResults extends Component {
       );
 
     const numPages = total % limit > 0 ? Math.floor(total / limit) + 1 : Math.floor(total / limit);
-
-    // let pages = [];
-
-    // for (let i = 1; i < numPages + 1; i++) {
-    //   pages.push(
-    //     <Link
-    //     key={`page-${i}`}
-    //     to={{
-    //       pathname: `/search`,
-    //       query: {
-    //         q: this.props.query,
-    //         limit: parseInt(limit, 10),
-    //         page: i
-    //       }
-    //     }}
-    //     style={{
-    //       padding: '2px 5px',
-    //       margin: '0 3px',
-    //       border: '1px solid gray',
-    //       backgroundColor: i === page ? 'red' : '#ffffff',
-    //       display: 'inline-block'
-    //     }} >{i}</Link>
-    //     );
-    // }
+    console.log(contacts);
+    console.log(slicedContacts);
 
     return (
       <div style={{marginTop: 50}} >
@@ -142,17 +120,14 @@ class SearchResults extends Component {
             <option value={10}>10</option>
             <option value={20}>20</option>
             <option value={50}>50</option>
-          {/*
-            <option value={100}>100</option>
-            <option value={200}>200</option>
-          */}
           </select>
           <span className='text' style={styles.limit.label} >results per page</span>
         </div>
-        <Contacts isReceiving={isReceiving} contacts={slicedContacts} />
-      {/*
-        <div style={{margin: '30px 0'}} className='horizontal-center'>{pages}</div>
-      */}
+        {slicedContacts.map((contact, i) =>
+          <div style={{borderBottom: `3px solid ${grey400}`, margin: 5}} >
+            <ContactListItem key={contact.email} {...contact} />
+          </div>
+          )}
         <div style={{margin: '30px 0'}} className='horizontal-center'>
           <Link
             to={{
@@ -195,7 +170,7 @@ export class SearchContainer extends Component {
   componentWillMount() {
     if (!isEmpty(this.props.query)) {
       const query = JSON.parse(this.props.query);
-      this.props.fetchSearch(query);
+      // this.props.fetchSearch(query);
       this.setState({
         beats: query.beats ? query.beats.map(beat => ({value: beat})) : []
       });
@@ -246,7 +221,7 @@ export class SearchContainer extends Component {
             <RaisedButton label='Search' />
           </div>
         </div>
-        {isReceiving || !contacts ? <div>LOADING...</div> : <SearchResults {...this.props} />}
+        {!contacts ? <div>LOADING...</div> : <SearchResults {...this.props} />}
       </div>
     );
   }
@@ -266,6 +241,6 @@ export default connect(
     };
   },
   (dispatch) => ({
-    fetchSearch: query => dispatch({type: searchConstant.REQUEST, query})
+    fetchSearch: query => dispatch({type: 'FETCH_QUERY_SEARCH', query})
   })
   )(withRouter(SearchContainer));

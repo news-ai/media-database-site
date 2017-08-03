@@ -20,7 +20,7 @@ const formatQuery = ({beats, isFreelancer, locations}) => {
 
 const PAGE_LIMIT = 50;
 export const fetchSearch = (action$, {getState}) =>
-  action$.ofType(searchConstant.REQUEST)
+  action$.ofType('FETCH_QUERY_SEARCH')
   .debounceTime(100)
   .filter(({query}) => getState().searchReducer.offset !== null)
   .switchMap(({query}) => {

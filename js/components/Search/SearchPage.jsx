@@ -132,7 +132,7 @@ class SearchPage extends Component {
     }
 
     if (!isEmpty(baseQuery)) {
-      // this.props.fetchSearch(baseQuery);
+      this.props.fetchSearch(baseQuery);
       this.props.router.push({
         pathname: `/search`,
         query: {
@@ -196,6 +196,6 @@ class SearchPage extends Component {
 export default connect(
   (state, props) => ({}),
   (dispatch) => ({
-    fetchSearch: query => dispatch({type: searchConstant.REQUEST, query})
+    fetchSearch: query => dispatch({type: 'FETCH_QUERY_SEARCH', query})
   })
   )(withRouter(SearchPage));
