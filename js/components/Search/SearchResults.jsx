@@ -233,7 +233,7 @@ export class SearchContainer extends Component {
           padding: '5px 10px',
           borderBottom: '1px solid black'
         }} >
-          <div style={{width: 200}} >
+          <div style={{width: 400}} >
             <Select
             multi
             labelKey='value'

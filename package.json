@@ -13,7 +13,7 @@
     "immutable": "^3.8.1",
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.13.1",
-    "material-ui": "^0.18.1",
+    "material-ui": "^0.18.7",
     "moment": "^2.14.1",
     "moment-timezone": "^0.5.9",
     "normalizr": "^3.2.3",
