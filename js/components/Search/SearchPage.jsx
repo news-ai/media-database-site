@@ -10,7 +10,8 @@ import FlatButton from 'material-ui/FlatButton';
 import isEmpty from 'lodash/isEmpty';
 import queryString from 'query-string';
 import pickBy from 'lodash/pickBy';
-import {grey600} from 'material-ui/styles/colors';
+import {grey600, grey800} from 'material-ui/styles/colors';
+import LocationSelector from 'components/Search/LocationSelector';
 
 import 'react-select/dist/react-select.css';
 
@@ -39,78 +40,13 @@ const beatOptions = [
   {value: 'World'},
 ];
 
-class LocationSelector extends Component {
-  constructor(props) {
-    super(props);
-    this.onCountrySelect = this.onCountrySelect.bind(this);
-  }
-
-  onCountrySelect(index, object) {
-    const country = object.value;
-    const {state, city} = this.props.locations[index];
-    this.props.onLocationSelect(index, {country, state, city});
-  }
-
-  render() {
-    const styles = {
-      select: {
-        width: 200,
-        display: 'inline-block'
-      },
-      selectContainer: {
-        margin: '10px 0'
-      },
-      smallIcon: {
-        width: 18,
-        height: 18,
-      },
-      small: {
-        width: 36,
-        height: 36,
-        padding: 8,
-      },
-    };
-    return (
-      <div>
-      {this.props.locations.map(({country, state, city}, i) =>
-        <div style={styles.selectContainer} key={`select-${i}`} >
-          <div className='vertical-center'>
-            <div style={styles.select} >
-              <Select placeholder='Country' labelKey='value' onChange={obj => this.props.onLocationSelect(i, {country: !!obj ? obj.value : undefined, state, city})} value={country} options={[{value: 'United States'}]} />
-            </div>
-            <div style={styles.select} >
-              <Select placeholder='State' labelKey='value' onChange={obj => this.props.onLocationSelect(i, {country, state: !!obj ? obj.value : undefined, city})} value={state} options={[{value: 'New York'}]} />
-            </div>
-            <div style={styles.select} >
-              <Select placeholder='City' labelKey='value' onChange={obj => this.props.onLocationSelect(i, {country, state, city: !!obj ? obj.value : undefined})} value={city} options={[{value: 'Boston'}]} />
-            </div>
-          {i > 0 &&
-            <div style={{margin: '0 10px'}} >
-              <IconButton
-              tooltip='Remove'
-              tooltipPosition='top-right'
-              style={styles.small}
-              iconStyle={Object.assign({}, styles.smallIcon, {color: grey600})}
-              iconClassName='fa fa-times'
-              onClick={_ => this.props.onLocationDelete(i)}
-              />
-            </div>}
-          </div>
-        </div>
-        )}
-        <FlatButton label='Add Location' icon={<FontIcon className='fa fa-plus' />} onClick={this.props.onLocationAdd} />
-      </div>
-    );
-  }
-}
-
-
 class SearchPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       beats: [],
-      locations: [{}]
+      locations: [{}],
+      advanceSearchOpen: false
     };
     this.onSubmit = this.onSubmit.bind(this);
     this.onLocationSelect = this.onLocationSelect.bind(this);
@@ -118,17 +54,42 @@ class SearchPage extends Component {
     this.onLocationDelete = this.onLocationDelete.bind(this);
   }
 
+  componentWillMount() {
+    if (this.props.queryString) {
+      const query = JSON.parse(this.props.queryString);
+      if (query.beats) {
+        this.setState({
+          beats: query.beats.map(beat => ({value: beat}))
+        });
+      }
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.queryString !== nextProps.queryString) {
+      const query = JSON.parse(nextProps.queryString);
+      if (query.beats) {
+        this.setState({
+          beats: query.beats.map(beat => ({value: beat}))
+        });
+      }
+    }
+  }
+
   onSubmit() {
-    const isFreelancer = this.isFreelancer.checked;
-    const freelancerType = this.freelancerType.checked;
     const baseQuery = {};
     if (this.state.beats.length > 0) baseQuery.beats = this.state.beats.map(({value}) => value);
-    if (freelancerType) baseQuery.isFreelancer = isFreelancer;
-    if (this.state.locations.some(({country, city, state}) => country || state || city)) {
-      const locations = this.state.locations
-      .filter(({country, city, state}) => country || state || city)
-      .map(loc => pickBy(loc, val => !!val));
-      baseQuery.locations = locations;
+    if (this.state.advanceSearchOpen) {
+      const isFreelancer = this.isFreelancer.checked;
+      const freelancerType = this.freelancerType.checked;
+      if (freelancerType) baseQuery.isFreelancer = isFreelancer;
+
+      if (this.state.locations.some(({country, city, state}) => country || state || city)) {
+        const locations = this.state.locations
+        .filter(({country, city, state}) => country || state || city)
+        .map(loc => pickBy(loc, val => !!val));
+        baseQuery.locations = locations;
+      }
     }
 
     if (!isEmpty(baseQuery)) {
@@ -160,33 +121,43 @@ class SearchPage extends Component {
   }
 
   render() {
+    const {advanceSearchOpen} = this.state;
     return (
       <div>
-        <div>
-          <label>Beats</label>
+        <div style={{width: 300}} >
           <Select
           multi
+          placeholder='Beats (e.g. Technology, Science)'
           labelKey='value'
           value={this.state.beats}
           options={beatOptions}
           onChange={beats => this.setState({beats})}
           />
         </div>
-        <div>
-          <label>Specify Freelancer Type</label>
-          <input type='checkbox' ref={ref => this.freelancerType = ref} />
-          <label>Is a Freelancer?</label>
-          <input type='checkbox' ref={ref => this.isFreelancer = ref} />
+        <div className='right' onClick={_ => this.setState(prev => ({advanceSearchOpen: !prev.advanceSearchOpen}))}>
+          <span
+          className='pointer'
+          style={{color: grey800, margin: '0 10px', userSelect: 'none'}}
+          >Advance Search <i className={`fa fa-${advanceSearchOpen ? 'minus' : 'plus'} `} /> </span>
         </div>
+      {advanceSearchOpen &&
         <div>
-          <label>Location(s)</label>
-        </div>
-        <LocationSelector
-        locations={this.state.locations}
-        onLocationSelect={this.onLocationSelect}
-        onLocationAdd={this.onLocationAdd}
-        onLocationDelete={this.onLocationDelete}
-        />
+          <div>
+            <label>Specify Freelancer Type</label>
+            <input type='checkbox' ref={ref => this.freelancerType = ref} />
+            <label>Is a Freelancer?</label>
+            <input type='checkbox' ref={ref => this.isFreelancer = ref} />
+          </div>
+          <div>
+            <label>Location(s)</label>
+          </div>
+          <LocationSelector
+          locations={this.state.locations}
+          onLocationSelect={this.onLocationSelect}
+          onLocationAdd={this.onLocationAdd}
+          onLocationDelete={this.onLocationDelete}
+          />
+        </div>}
         <FlatButton label='Submit' onClick={this.onSubmit} />
       </div>
     );

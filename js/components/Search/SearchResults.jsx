@@ -10,6 +10,7 @@ import IconButton from 'material-ui/IconButton';
 import {searchConstant} from './constants';
 import {blue500, grey400, grey700, grey800} from 'material-ui/styles/colors';
 import ContactListItem from 'components/Contacts/ContactListItem';
+import SearchPage from 'components/Search/SearchPage';
 
 const beatOptions = [
   {value: 'Arts and Entertainment'},
@@ -164,9 +165,7 @@ class SearchResults extends Component {
 export class SearchContainer extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      beats: [],
-    };
+    this.state = {};
     this.onSubmit = this.onSubmit.bind(this);
   }
 
@@ -174,9 +173,6 @@ export class SearchContainer extends Component {
     if (!isEmpty(this.props.query)) {
       const query = JSON.parse(this.props.query);
       // this.props.fetchSearch(query);
-      this.setState({
-        beats: query.beats ? query.beats.map(beat => ({value: beat})) : []
-      });
       if (!this.props.cacheQuery || this.props.query !== JSON.stringify(this.props.cacheQuery)) {
         this.props.fetchSearch(query);
       }
@@ -187,9 +183,6 @@ export class SearchContainer extends Component {
     if (this.props.query !== nextProps.query) {
       const query = JSON.parse(nextProps.query);
       // this.props.fetchSearch(query);
-      this.setState({
-        beats: query.beats ? query.beats.map(beat => ({value: beat})) : []
-      });
       this.props.fetchSearch(query);
     }
   }
@@ -213,11 +206,12 @@ export class SearchContainer extends Component {
   }
 
   render() {
-    const {isReceiving, contacts} = this.props;
+    const {isReceiving, contacts, query} = this.props;
+    const {advanceSearchOpen} = this.state;
 
     return (
       <div>
-        <div className='vertical-center' style={{
+        <div style={{
           position: 'fixed',
           top: 0,
           width: '100%',
@@ -225,18 +219,7 @@ export class SearchContainer extends Component {
           padding: '5px 10px',
           borderBottom: '1px solid black'
         }} >
-          <div style={{width: 400}} >
-            <Select
-            multi
-            labelKey='value'
-            value={this.state.beats}
-            options={beatOptions}
-            onChange={beats => this.setState({beats})}
-            />
-          </div>
-          <div className='right'>
-            <RaisedButton label='Search' onClick={this.onSubmit} />
-          </div>
+          <SearchPage queryString={query} />
         </div>
         {!contacts ? <div>LOADING...</div> : <SearchResults {...this.props} />}
       </div>
