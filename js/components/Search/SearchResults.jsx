@@ -103,34 +103,30 @@ class SearchResults extends Component {
       );
 
     const numPages = total % limit > 0 ? Math.floor(total / limit) + 1 : Math.floor(total / limit);
-    let pages = [];
 
-    for (let i = 1; i < numPages + 1; i++) {
-      pages.push(
-        <Link
-        key={`page-${i}`}
-        to={{
-          pathname: `/search`,
-          query: {
-            q: this.props.query,
-            limit: parseInt(limit, 10),
-            page: i
-          }
-        }}
-        style={{
-          padding: '2px 5px',
-          margin: '0 3px',
-          border: '1px solid gray',
-          backgroundColor: i === page ? 'red' : '#ffffff',
-          display: 'inline-block'
-        }} >{i}</Link>
-        );
-    }
-    console.log(page);
-    console.log((page - 1) * limit);
-    console.log(page * limit);
-    console.log(slicedContacts);
-    console.log(isReceiving);
+    // let pages = [];
+
+    // for (let i = 1; i < numPages + 1; i++) {
+    //   pages.push(
+    //     <Link
+    //     key={`page-${i}`}
+    //     to={{
+    //       pathname: `/search`,
+    //       query: {
+    //         q: this.props.query,
+    //         limit: parseInt(limit, 10),
+    //         page: i
+    //       }
+    //     }}
+    //     style={{
+    //       padding: '2px 5px',
+    //       margin: '0 3px',
+    //       border: '1px solid gray',
+    //       backgroundColor: i === page ? 'red' : '#ffffff',
+    //       display: 'inline-block'
+    //     }} >{i}</Link>
+    //     );
+    // }
 
     return (
       <div style={{marginTop: 50}} >
@@ -154,7 +150,34 @@ class SearchResults extends Component {
           <span className='text' style={styles.limit.label} >results per page</span>
         </div>
         <Contacts isReceiving={isReceiving} contacts={slicedContacts} />
+      {/*
         <div style={{margin: '30px 0'}} className='horizontal-center'>{pages}</div>
+      */}
+        <div style={{margin: '30px 0'}} className='horizontal-center'>
+          <Link
+            to={{
+              pathname: `/search`,
+              query: {
+                q: this.props.query,
+                limit: parseInt(limit, 10),
+                page: page - 1
+              }
+            }}>
+          <RaisedButton label='Previous' />
+          </Link>
+          <span>{page} of {numPages} Pages</span>
+          <Link
+          to={{
+            pathname: `/search`,
+            query: {
+              q: this.props.query,
+              limit: parseInt(limit, 10),
+              page: page + 1
+            }
+          }}>
+          <RaisedButton label='Next' />
+          </Link>
+        </div>
       </div>
     );
   }
@@ -166,6 +189,7 @@ export class SearchContainer extends Component {
     this.state = {
       beats: [],
     };
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   componentWillMount() {
@@ -174,6 +198,24 @@ export class SearchContainer extends Component {
       this.props.fetchSearch(query);
       this.setState({
         beats: query.beats.map(beat => ({value: beat}))
+      });
+    }
+  }
+
+  onSubmit() {
+    const isFreelancer = this.isFreelancer.checked;
+    const freelancerType = this.freelancerType.checked;
+    const baseQuery = {};
+    if (this.state.beats.length > 0) baseQuery.beats = this.state.beats.map(({value}) => value);
+    if (freelancerType) baseQuery.isFreelancer = isFreelancer;
+
+    if (!isEmpty(baseQuery)) {
+      // this.props.fetchSearch(baseQuery);
+      this.props.router.push({
+        pathname: `/search`,
+        query: {
+          q: JSON.stringify(baseQuery)
+        }
       });
     }
   }

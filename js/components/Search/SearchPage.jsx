@@ -35,13 +35,47 @@ const beatOptions = [
   {value: 'World'},
 ];
 
+class LocationSelector extends Component {
+  constructor(props) {
+    super(props);
+    this.onCountrySelect = this.onCountrySelect.bind(this);
+  }
+
+  onCountrySelect(index, object) {
+    const country = object.value;
+    const {state, city} = this.props.locations[index];
+    this.props.onLocationSelect(index, {country, state, city});
+  }
+
+  render() {
+    return (
+      <div>
+      {this.props.locations.map(({country, state, city}, i) =>
+        <div key={`select-${i}`} >
+          <div onClick={_ => this.props.onLocationDelete(i)}>-</div>
+          <Select labelKey='value' onChange={({value}) => this.props.onLocationSelect(i, {country: value, state, city})} value={country} options={[{value: 'United States'}]} />
+          <Select labelKey='value' onChange={({value}) => this.props.onLocationSelect(i, {country, state: value, city})} value={state} options={[{value: 'New York'}]} />
+          <Select labelKey='value' onChange={({value}) => this.props.onLocationSelect(i, {country, state, city: value})} value={city} options={[{value: 'Boston'}]} />
+        </div>
+        )}
+        <div onClick={this.props.onLocationAdd} >+</div>
+      </div>
+    );
+  }
+}
+
+
 class SearchPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      beats: []
+      beats: [],
+      locations: [{}]
     };
     this.onSubmit = this.onSubmit.bind(this);
+    this.onLocationSelect = this.onLocationSelect.bind(this);
+    this.onLocationAdd = this.onLocationAdd.bind(this);
+    this.onLocationDelete = this.onLocationDelete.bind(this);
   }
 
   onSubmit() {
@@ -62,32 +96,60 @@ class SearchPage extends Component {
     }
   }
 
+  onLocationAdd() {
+    const {locations} = this.state;
+    this.setState({locations: [...locations, {country: 'United States'}]});
+  }
+
+  onLocationDelete(index) {
+    const {locations} = this.state;
+    this.setState({locations: locations.filter((loc, i) => i !== index)});
+  }
+
+  onLocationSelect(index, {country, state, city}) {
+    const {locations} = this.state;
+    this.setState({
+      locations: locations.map((loc, i) => i === index ? ({country, state, city}) : loc)
+    });
+  }
+
   render() {
     console.log(this.props);
     return (
       <div>
-        <label>Beats</label>
-        <Select
-        multi
-        labelKey='value'
-        value={this.state.beats}
-        options={beatOptions}
-        onChange={beats => this.setState({beats})}
-        />
-        <label>Specify Freelancer Type</label>
-        <input type='checkbox' ref={ref => this.freelancerType = ref} />
-        <label>Is a Freelancer?</label>
-        <input type='checkbox' ref={ref => this.isFreelancer = ref} />
         <div>
-          <FlatButton label='Submit' onClick={this.onSubmit} />
+          <label>Beats</label>
+          <Select
+          multi
+          labelKey='value'
+          value={this.state.beats}
+          options={beatOptions}
+          onChange={beats => this.setState({beats})}
+          />
         </div>
+        <div>
+          <label>Specify Freelancer Type</label>
+          <input type='checkbox' ref={ref => this.freelancerType = ref} />
+          <label>Is a Freelancer?</label>
+          <input type='checkbox' ref={ref => this.isFreelancer = ref} />
+        </div>
+        <div>
+          <label>Location(s)</label>
+        </div>
+        <LocationSelector
+        locations={this.state.locations}
+        onLocationSelect={this.onLocationSelect}
+        onLocationAdd={this.onLocationAdd}
+        onLocationDelete={this.onLocationDelete}
+        />
+        <FlatButton label='Submit' onClick={this.onSubmit} />
       </div>
     );
   }
 }
 
 export default connect(
-  (state) => ({}),
+  (state, props) => ({}),
   (dispatch) => ({
     fetchSearch: query => dispatch({type: searchConstant.REQUEST, query})
   })
