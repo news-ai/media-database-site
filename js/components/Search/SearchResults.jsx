@@ -197,7 +197,7 @@ export class SearchContainer extends Component {
       const query = JSON.parse(this.props.query);
       this.props.fetchSearch(query);
       this.setState({
-        beats: query.beats.map(beat => ({value: beat}))
+        beats: query.beats ? query.beats.map(beat => ({value: beat})) : []
       });
     }
   }

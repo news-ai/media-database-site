@@ -7,6 +7,7 @@ import {searchConstant} from './constants';
 import FlatButton from 'material-ui/FlatButton';
 import isEmpty from 'lodash/isEmpty';
 import queryString from 'query-string';
+import pickBy from 'lodash/pickBy';
 
 import 'react-select/dist/react-select.css';
 
@@ -53,9 +54,9 @@ class LocationSelector extends Component {
       {this.props.locations.map(({country, state, city}, i) =>
         <div key={`select-${i}`} >
           <div onClick={_ => this.props.onLocationDelete(i)}>-</div>
-          <Select labelKey='value' onChange={({value}) => this.props.onLocationSelect(i, {country: value, state, city})} value={country} options={[{value: 'United States'}]} />
-          <Select labelKey='value' onChange={({value}) => this.props.onLocationSelect(i, {country, state: value, city})} value={state} options={[{value: 'New York'}]} />
-          <Select labelKey='value' onChange={({value}) => this.props.onLocationSelect(i, {country, state, city: value})} value={city} options={[{value: 'Boston'}]} />
+          <Select labelKey='value' onChange={obj => this.props.onLocationSelect(i, {country: !!obj ? obj.value : undefined, state, city})} value={country} options={[{value: 'United States'}]} />
+          <Select labelKey='value' onChange={obj => this.props.onLocationSelect(i, {country, state: !!obj ? obj.value : undefined, city})} value={state} options={[{value: 'New York'}]} />
+          <Select labelKey='value' onChange={obj => this.props.onLocationSelect(i, {country, state, city: !!obj ? obj.value : undefined})} value={city} options={[{value: 'Boston'}]} />
         </div>
         )}
         <div onClick={this.props.onLocationAdd} >+</div>
@@ -84,6 +85,12 @@ class SearchPage extends Component {
     const baseQuery = {};
     if (this.state.beats.length > 0) baseQuery.beats = this.state.beats.map(({value}) => value);
     if (freelancerType) baseQuery.isFreelancer = isFreelancer;
+    if (this.state.locations.some(({country, city, state}) => country || state || city)) {
+      const locations = this.state.locations
+      .filter(({country, city, state}) => country || state || city)
+      .map(loc => pickBy(loc, val => !!val));
+      baseQuery.locations = locations;
+    }
 
     if (!isEmpty(baseQuery)) {
       // this.props.fetchSearch(baseQuery);
@@ -114,7 +121,6 @@ class SearchPage extends Component {
   }
 
   render() {
-    console.log(this.props);
     return (
       <div>
         <div>

@@ -10,10 +10,11 @@ import has from 'lodash/has';
 const contactSchema = new schema.Entity('contacts', {}, {idAttribute: 'email'});
 const contactListSchema = [contactSchema];
 
-const formatQuery = ({beats, isFreelancer}) => {
+const formatQuery = ({beats, isFreelancer, locations}) => {
   const baseQuery = {included: {}};
   if (beats) baseQuery.included.beats = beats;
   if (isFreelancer !== undefined) baseQuery.included.isFreelancer = isFreelancer;
+  if (locations && locations.length > 0) baseQuery.included.locations = locations;
   return baseQuery;
 };
 
