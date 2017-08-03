@@ -33,7 +33,7 @@ const ContactListItem = ({email, contactInfo, demographics, writingInformation, 
         <div className='large-12 medium-12 small-12 columns'>
           <span style={{color: grey700}} className='text'>{demographics.locationGeneral}</span>
         </div>
-        <div className='large-12 medium-12 small-12 columns vertical-center'>
+        <div style={{margin: '3px 0'}} className='large-12 medium-12 small-12 columns vertical-center'>
           <label style={{color: grey700}}>Beat(s)</label>
           {writingInformation.beats.map(beat =>
             <Tag key={beat} color={lightBlue50} borderColor={blue300} hideDelete text={beat} />)}

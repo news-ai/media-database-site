@@ -6,6 +6,7 @@ import queryString from 'query-string';
 import Select from 'react-select';
 import isEmpty from 'lodash/isEmpty';
 import RaisedButton from 'material-ui/RaisedButton';
+import IconButton from 'material-ui/IconButton';
 import {searchConstant} from './constants';
 import {blue500, grey400, grey700, grey800} from 'material-ui/styles/colors';
 import ContactListItem from 'components/Contacts/ContactListItem';
@@ -103,8 +104,8 @@ class SearchResults extends Component {
       );
 
     const numPages = total % limit > 0 ? Math.floor(total / limit) + 1 : Math.floor(total / limit);
-    console.log(contacts);
-    console.log(slicedContacts);
+    // console.log(contacts);
+    // console.log(slicedContacts);
 
     return (
       <div style={{marginTop: 50}} >
@@ -128,7 +129,8 @@ class SearchResults extends Component {
             <ContactListItem key={contact.email} {...contact} />
           </div>
           )}
-        <div style={{margin: '30px 0'}} className='horizontal-center'>
+        <div style={{margin: '30px 0'}} className='vertical-center horizontal-center'>
+        {page > 1 &&
           <Link
             to={{
               pathname: `/search`,
@@ -138,9 +140,10 @@ class SearchResults extends Component {
                 page: page - 1
               }
             }}>
-          <RaisedButton label='Previous' />
-          </Link>
-          <span>{page} of {numPages} Pages</span>
+            <IconButton iconClassName='fa fa-arrow-left' label='Previous' />
+          </Link>}
+          <span style={{margin: '0 10px'}} >{page} of {numPages} pages</span>
+        {page < numPages &&
           <Link
           to={{
             pathname: `/search`,
@@ -150,8 +153,8 @@ class SearchResults extends Component {
               page: page + 1
             }
           }}>
-          <RaisedButton label='Next' />
-          </Link>
+            <IconButton iconClassName='fa fa-arrow-right' label='Next' />
+          </Link>}
         </div>
       </div>
     );
@@ -174,15 +177,29 @@ export class SearchContainer extends Component {
       this.setState({
         beats: query.beats ? query.beats.map(beat => ({value: beat})) : []
       });
+      if (!this.props.cacheQuery || this.props.query !== JSON.stringify(this.props.cacheQuery)) {
+        this.props.fetchSearch(query);
+      }
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.query !== nextProps.query) {
+      const query = JSON.parse(nextProps.query);
+      // this.props.fetchSearch(query);
+      this.setState({
+        beats: query.beats ? query.beats.map(beat => ({value: beat})) : []
+      });
+      this.props.fetchSearch(query);
     }
   }
 
   onSubmit() {
-    const isFreelancer = this.isFreelancer.checked;
-    const freelancerType = this.freelancerType.checked;
+    // const isFreelancer = this.isFreelancer.checked;
+    // const freelancerType = this.freelancerType.checked;
     const baseQuery = {};
     if (this.state.beats.length > 0) baseQuery.beats = this.state.beats.map(({value}) => value);
-    if (freelancerType) baseQuery.isFreelancer = isFreelancer;
+    // if (freelancerType) baseQuery.isFreelancer = isFreelancer;
 
     if (!isEmpty(baseQuery)) {
       // this.props.fetchSearch(baseQuery);
@@ -218,7 +235,7 @@ export class SearchContainer extends Component {
             />
           </div>
           <div className='right'>
-            <RaisedButton label='Search' />
+            <RaisedButton label='Search' onClick={this.onSubmit} />
           </div>
         </div>
         {!contacts ? <div>LOADING...</div> : <SearchResults {...this.props} />}
@@ -235,6 +252,7 @@ export default connect(
       isReceiving: searchReducer.isReceiving,
       contacts: searchReducer.mostRecentReceived.map(id => contactReducer[id]),
       query: q,
+      cacheQuery: searchReducer.currentQuery,
       page: page ? parseInt(page, 10) : 1,
       limit: limit ? parseInt(limit, 10) : 20,
       total: searchReducer.total,

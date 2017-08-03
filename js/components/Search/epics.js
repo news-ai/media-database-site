@@ -22,16 +22,19 @@ const PAGE_LIMIT = 50;
 export const fetchSearch = (action$, {getState}) =>
   action$.ofType('FETCH_QUERY_SEARCH')
   .debounceTime(100)
-  .filter(({query}) => getState().searchReducer.offset !== null)
+  .filter(({query}) => {
+    if (JSON.stringify(query) === JSON.stringify(getState().searchReducer.currentQuery)) return getState().searchReducer.offset !== null;
+    return true;
+  })
   .switchMap(({query}) => {
     const formattedQuery = formatQuery(query);
-    console.log(formattedQuery);
+    // console.log(formattedQuery);
     const OFFSET = JSON.stringify(query) === JSON.stringify(getState().searchReducer.currentQuery) ? getState().searchReducer.offset : 0;
     return Observable.merge(
       Observable.of({type: searchConstant.REQUEST, query}),
       Observable.from(api.post(`/database-contacts/search?limit=${PAGE_LIMIT}&offset=${OFFSET}`, formattedQuery))
       .flatMap(response => {
-        console.log(response);
+        // console.log(response);
         const res = normalize(response.data, contactListSchema);
         return [
           {type: contactConstant.RECEIVE_MULTIPLE, ids: res.result, contacts: res.entities.contacts},

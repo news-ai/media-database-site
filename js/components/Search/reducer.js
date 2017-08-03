@@ -17,9 +17,9 @@ function searchReducer(state = initialState, action) {
       return assignToEmpty(state, {
         isReceiving: false,
         didInvalidate: false,
-        mostRecentReceived: action.pastQuery ? action.ids : [...state.mostRecentReceived, ...action.ids],
+        mostRecentReceived: JSON.stringify(action.query) !== JSON.stringify(state.currentQuery) ? action.ids : [...state.mostRecentReceived, ...action.ids],
         currentQuery: action.query,
-        pastQueries: action.pastQuery ? [...state.pastQueries, assignToEmpty(action.pastQuery)] : state.pastQueries,
+        pastQueries: JSON.stringify(action.query) !== JSON.stringify(state.currentQuery) ? [...state.pastQueries, assignToEmpty(state.currentQuery)] : state.pastQueries,
         offset: action.offset,
         total: action.total
       });
