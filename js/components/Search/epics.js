@@ -10,14 +10,6 @@ import has from 'lodash/has';
 const contactSchema = new schema.Entity('contacts', {}, {idAttribute: 'email'});
 const contactListSchema = [contactSchema];
 
-const formatQuery = ({beats, isFreelancer, locations}) => {
-  const baseQuery = {included: {}};
-  if (beats) baseQuery.included.beats = beats;
-  if (isFreelancer !== undefined) baseQuery.included.isFreelancer = isFreelancer;
-  if (locations && locations.length > 0) baseQuery.included.locations = locations;
-  return baseQuery;
-};
-
 const PAGE_LIMIT = 50;
 export const fetchSearch = (action$, {getState}) =>
   action$.ofType('FETCH_QUERY_SEARCH')
@@ -27,12 +19,12 @@ export const fetchSearch = (action$, {getState}) =>
     return true;
   })
   .switchMap(({query}) => {
-    const formattedQuery = formatQuery(query);
+    // const formattedQuery = formatQuery(query);
     // console.log(formattedQuery);
     const OFFSET = JSON.stringify(query) === JSON.stringify(getState().searchReducer.currentQuery) ? getState().searchReducer.offset : 0;
     return Observable.merge(
       Observable.of({type: searchConstant.REQUEST, query}),
-      Observable.from(api.post(`/database-contacts/search?limit=${PAGE_LIMIT}&offset=${OFFSET}`, formattedQuery))
+      Observable.from(api.post(`/database-contacts/search?limit=${PAGE_LIMIT}&offset=${OFFSET}`, {included: query}))
       .flatMap(response => {
         // console.log(response);
         const res = normalize(response.data, contactListSchema);

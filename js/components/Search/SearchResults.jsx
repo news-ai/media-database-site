@@ -167,7 +167,6 @@ export class SearchContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.onSubmit = this.onSubmit.bind(this);
   }
 
   componentWillMount() {
@@ -188,27 +187,8 @@ export class SearchContainer extends Component {
     }
   }
 
-  onSubmit() {
-    // const isFreelancer = this.isFreelancer.checked;
-    // const freelancerType = this.freelancerType.checked;
-    const baseQuery = {};
-    if (this.state.beats.length > 0) baseQuery.beats = this.state.beats.map(({value}) => value);
-    // if (freelancerType) baseQuery.isFreelancer = isFreelancer;
-
-    if (!isEmpty(baseQuery)) {
-      // this.props.fetchSearch(baseQuery);
-      this.props.router.push({
-        pathname: `/search`,
-        query: {
-          q: JSON.stringify(baseQuery)
-        }
-      });
-    }
-  }
-
   render() {
     const {isReceiving, contacts, query} = this.props;
-    const {advanceSearchOpen} = this.state;
 
     return (
       <div>

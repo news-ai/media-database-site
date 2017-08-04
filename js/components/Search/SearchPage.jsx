@@ -47,8 +47,10 @@ class SearchPage extends Component {
       beats: [],
       locations: [{}],
       advanceSearchOpen: false,
+      isFreelancer: false,
       isNotFreelancer: false,
-      isFreelancer: false
+      isInfluencer: false,
+      isNotInfluencer: false,
     };
     this.onSubmit = this.onSubmit.bind(this);
     this.onLocationSelect = this.onLocationSelect.bind(this);
@@ -59,11 +61,12 @@ class SearchPage extends Component {
   componentWillMount() {
     if (this.props.queryString) {
       const query = JSON.parse(this.props.queryString);
-      if (query.beats) {
-        this.setState({
-          beats: query.beats.map(beat => ({value: beat}))
-        });
-      }
+      if (query.beats) this.setState({beats: query.beats.map(beat => ({value: beat}))});
+      if (query.isFreelancer === true) this.setState({isFreelancer: true, isNotFreelancer: false});
+      else if (query.isFreelancer === false) this.setState({isNotFreelancer: true, isFreelancer: false});
+
+      if (query.isFreelancer === true) this.setState({isInfluencer: true, isNotInfluencer: false});
+      else if (query.isFreelancer === false) this.setState({isNotInfluencer: true, isInfluencer: false});
     }
   }
 
@@ -73,6 +76,9 @@ class SearchPage extends Component {
       if (query.beats) this.setState({beats: query.beats.map(beat => ({value: beat}))});
       if (query.isFreelancer === true) this.setState({isFreelancer: true, isNotFreelancer: false});
       else if (query.isFreelancer === false) this.setState({isNotFreelancer: true, isFreelancer: false});
+
+      if (query.isFreelancer === true) this.setState({isInfluencer: true, isNotInfluencer: false});
+      else if (query.isFreelancer === false) this.setState({isNotInfluencer: true, isInfluencer: false});
     }
   }
 
@@ -82,6 +88,9 @@ class SearchPage extends Component {
     if (this.state.advanceSearchOpen) {
       if (this.state.isFreelancer) baseQuery.isFreelancer = true;
       else if (this.state.isNotFreelancer) baseQuery.isFreelancer = false;
+
+      if (this.state.isInfluencer) baseQuery.isInfluencer = true;
+      else if (this.state.isNotInfluencer) baseQuery.isNotInfluencer = false;
 
       if (this.state.locations.some(({country, city, state}) => country || state || city)) {
         const locations = this.state.locations
@@ -120,7 +129,7 @@ class SearchPage extends Component {
   }
 
   render() {
-    const {advanceSearchOpen, isNotFreelancer, isFreelancer} = this.state;
+    const {advanceSearchOpen, isNotFreelancer, isFreelancer, isInfluencer, isNotInfluencer} = this.state;
     return (
       <div >
         <FlatButton className='right' label='Submit' onClick={this.onSubmit} />
@@ -150,6 +159,14 @@ class SearchPage extends Component {
             <div style={{margin: '0 10px'}} >
               <label>Freelancer Only</label>
               <input disabled={isNotFreelancer} type='checkbox' checked={isFreelancer} onChange={e => this.setState({isFreelancer: e.target.checked})} />
+            </div>
+            <div style={{margin: '0 10px'}} >
+              <label>Non-Influencer Only</label>
+              <input disabled={isInfluencer} type='checkbox' checked={isNotInfluencer} onChange={e => this.setState({isNotInfluencer: e.target.checked})} />
+            </div>
+            <div style={{margin: '0 10px'}} >
+              <label>Influencer Only</label>
+              <input disabled={isNotInfluencer} type='checkbox' checked={isInfluencer} onChange={e => this.setState({isInfluencer: e.target.checked})} />
             </div>
           </div>
           <div>
