@@ -46,7 +46,9 @@ class SearchPage extends Component {
     this.state = {
       beats: [],
       locations: [{}],
-      advanceSearchOpen: false
+      advanceSearchOpen: false,
+      isNotFreelancer: false,
+      isFreelancer: false
     };
     this.onSubmit = this.onSubmit.bind(this);
     this.onLocationSelect = this.onLocationSelect.bind(this);
@@ -68,11 +70,9 @@ class SearchPage extends Component {
   componentWillReceiveProps(nextProps) {
     if (this.props.queryString !== nextProps.queryString) {
       const query = JSON.parse(nextProps.queryString);
-      if (query.beats) {
-        this.setState({
-          beats: query.beats.map(beat => ({value: beat}))
-        });
-      }
+      if (query.beats) this.setState({beats: query.beats.map(beat => ({value: beat}))});
+      if (query.isFreelancer === true) this.setState({isFreelancer: true, isNotFreelancer: false});
+      else if (query.isFreelancer === false) this.setState({isNotFreelancer: true, isFreelancer: false});
     }
   }
 
@@ -80,9 +80,8 @@ class SearchPage extends Component {
     const baseQuery = {};
     if (this.state.beats.length > 0) baseQuery.beats = this.state.beats.map(({value}) => value);
     if (this.state.advanceSearchOpen) {
-      const isFreelancer = this.isFreelancer.checked;
-      const freelancerType = this.freelancerType.checked;
-      if (freelancerType) baseQuery.isFreelancer = isFreelancer;
+      if (this.state.isFreelancer) baseQuery.isFreelancer = true;
+      else if (this.state.isNotFreelancer) baseQuery.isFreelancer = false;
 
       if (this.state.locations.some(({country, city, state}) => country || state || city)) {
         const locations = this.state.locations
@@ -121,9 +120,16 @@ class SearchPage extends Component {
   }
 
   render() {
-    const {advanceSearchOpen} = this.state;
+    const {advanceSearchOpen, isNotFreelancer, isFreelancer} = this.state;
     return (
-      <div>
+      <div >
+        <FlatButton className='right' label='Submit' onClick={this.onSubmit} />
+        <div className='right' onClick={_ => this.setState(prev => ({advanceSearchOpen: !prev.advanceSearchOpen}))}>
+          <span
+          className='pointer'
+          style={{color: grey800, margin: '0 10px', userSelect: 'none'}}
+          >Advance Search <i className={`fa fa-${advanceSearchOpen ? 'minus' : 'plus'} `} /> </span>
+        </div>
         <div style={{width: 300}} >
           <Select
           multi
@@ -134,19 +140,17 @@ class SearchPage extends Component {
           onChange={beats => this.setState({beats})}
           />
         </div>
-        <div className='right' onClick={_ => this.setState(prev => ({advanceSearchOpen: !prev.advanceSearchOpen}))}>
-          <span
-          className='pointer'
-          style={{color: grey800, margin: '0 10px', userSelect: 'none'}}
-          >Advance Search <i className={`fa fa-${advanceSearchOpen ? 'minus' : 'plus'} `} /> </span>
-        </div>
       {advanceSearchOpen &&
         <div>
-          <div>
-            <label>Specify Freelancer Type</label>
-            <input type='checkbox' ref={ref => this.freelancerType = ref} />
-            <label>Is a Freelancer?</label>
-            <input type='checkbox' ref={ref => this.isFreelancer = ref} />
+          <div className='vertical-center'>
+            <div style={{margin: '0 10px'}} >
+              <label>Non-Freelancer Only</label>
+              <input disabled={isFreelancer} type='checkbox' checked={isNotFreelancer} onChange={e => this.setState({isNotFreelancer: e.target.checked})} />
+            </div>
+            <div style={{margin: '0 10px'}} >
+              <label>Freelancer Only</label>
+              <input disabled={isNotFreelancer} type='checkbox' checked={isFreelancer} onChange={e => this.setState({isFreelancer: e.target.checked})} />
+            </div>
           </div>
           <div>
             <label>Location(s)</label>
@@ -158,7 +162,6 @@ class SearchPage extends Component {
           onLocationDelete={this.onLocationDelete}
           />
         </div>}
-        <FlatButton label='Submit' onClick={this.onSubmit} />
       </div>
     );
   }

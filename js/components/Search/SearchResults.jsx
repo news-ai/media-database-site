@@ -11,6 +11,7 @@ import {searchConstant} from './constants';
 import {blue500, grey400, grey700, grey800} from 'material-ui/styles/colors';
 import ContactListItem from 'components/Contacts/ContactListItem';
 import SearchPage from 'components/Search/SearchPage';
+import Paper from 'material-ui/Paper';
 
 const beatOptions = [
   {value: 'Arts and Entertainment'},
@@ -211,16 +212,18 @@ export class SearchContainer extends Component {
 
     return (
       <div>
-        <div style={{
+        <Paper zDepth={2} style={{
           position: 'fixed',
           top: 0,
           width: '100%',
           backgroundColor: '#ffffff',
           padding: '5px 10px',
-          borderBottom: '1px solid black'
+          zIndex: 1000,
+          overflowY: 'scroll',
+          maxHeight: '100%'
         }} >
           <SearchPage queryString={query} />
-        </div>
+        </Paper>
         {!contacts ? <div>LOADING...</div> : <SearchResults {...this.props} />}
       </div>
     );
