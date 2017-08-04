@@ -8,6 +8,7 @@
     "classnames": "^2.2.5",
     "draft-convert": "^1.4.3",
     "draft-js": "^0.10.0",
+    "es6-promise-debounce": "^1.0.1",
     "hopscotch": "^0.2.6",
     "immutability-helper": "^2.2.2",
     "immutable": "^3.8.1",

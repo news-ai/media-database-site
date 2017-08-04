@@ -168,3 +168,7 @@ input {
 .Select-menu-outer {
   z-index: 1000;
 }
+
+.Select-input > input {
+  color: black;
+}
