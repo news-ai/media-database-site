@@ -127,31 +127,6 @@ class Selector extends Component {
 }
 
 class LocationSelector extends Component {
-  constructor(props) {
-    super(props);
-    this.loadCountries = debounce(this.loadCountries.bind(this), 750);
-    this.loadStates = debounce(this.loadStates.bind(this), 750);
-    this.loadCities = debounce(this.loadCities.bind(this), 750);
-  }
-
-  loadCountries(country, cb) {
-    if (country.length > 0) {
-      return api.get(`/database-contacts/locations?country=${country}`)
-      .then(response => {
-        console.log(response);
-        cb(null, {options: response.data.map(({countryName}) => ({value: countryName}))});
-      });
-    }
-  }
-
-  loadStates(state, cb) {
-
-  }
-
-  loadCities(city, cb) {
-
-  }
-
   render() {
     return (
       <div>
