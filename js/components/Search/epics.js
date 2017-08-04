@@ -27,7 +27,7 @@ export const fetchSearch = (action$, {getState}) =>
       Observable.from(api.post(`/database-contacts/search?limit=${PAGE_LIMIT}&offset=${OFFSET}`, {included: query}))
       .flatMap(response => {
         // console.log(response);
-        const res = normalize(response.data, contactListSchema);
+        const res = normalize(response.data === null ? [] : response.data, contactListSchema);
         return [
           {type: contactConstant.RECEIVE_MULTIPLE, ids: res.result, contacts: res.entities.contacts},
           {

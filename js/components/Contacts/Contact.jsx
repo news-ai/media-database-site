@@ -127,7 +127,7 @@ class Contact extends Component {
           <div style={{padding: '10px 0', backgroundColor: lightBlue50}} >
             <span style={{color: grey700, marginLeft: 10}} >Tweets</span>
           </div>
-          <TweetFeed height={350} email={email} />
+          <TweetFeed height={450} email={email} />
         </div>
       </div>
       );

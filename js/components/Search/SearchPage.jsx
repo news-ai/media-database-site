@@ -46,7 +46,7 @@ class SearchPage extends Component {
     this.state = {
       beats: [],
       locations: [{}],
-      advanceSearchOpen: false,
+      advancedSearchOpen: false,
       isFreelancer: false,
       isNotFreelancer: false,
       isInfluencer: false,
@@ -77,15 +77,15 @@ class SearchPage extends Component {
       if (query.isFreelancer === true) this.setState({isFreelancer: true, isNotFreelancer: false});
       else if (query.isFreelancer === false) this.setState({isNotFreelancer: true, isFreelancer: false});
 
-      if (query.isFreelancer === true) this.setState({isInfluencer: true, isNotInfluencer: false});
-      else if (query.isFreelancer === false) this.setState({isNotInfluencer: true, isInfluencer: false});
+      if (query.isInfluencer === true) this.setState({isInfluencer: true, isNotInfluencer: false});
+      else if (query.isInfluencer === false) this.setState({isNotInfluencer: true, isInfluencer: false});
     }
   }
 
   onSubmit() {
     const baseQuery = {};
     if (this.state.beats.length > 0) baseQuery.beats = this.state.beats.map(({value}) => value);
-    if (this.state.advanceSearchOpen) {
+    if (this.state.advancedSearchOpen || !this.props.hideable) {
       if (this.state.isFreelancer) baseQuery.isFreelancer = true;
       else if (this.state.isNotFreelancer) baseQuery.isFreelancer = false;
 
@@ -99,6 +99,7 @@ class SearchPage extends Component {
         baseQuery.locations = locations;
       }
     }
+    console.log(baseQuery);
 
     if (!isEmpty(baseQuery)) {
       this.props.fetchSearch(baseQuery);
@@ -129,29 +130,34 @@ class SearchPage extends Component {
   }
 
   render() {
-    const {advanceSearchOpen, isNotFreelancer, isFreelancer, isInfluencer, isNotInfluencer} = this.state;
+    const {hideable} = this.props;
+    const {advancedSearchOpen, isNotFreelancer, isFreelancer, isInfluencer, isNotInfluencer} = this.state;
+    const openPanel = hideable ? advancedSearchOpen : true;
     return (
-      <div >
-        <FlatButton className='right' label='Submit' onClick={this.onSubmit} />
-        <div className='right' onClick={_ => this.setState(prev => ({advanceSearchOpen: !prev.advanceSearchOpen}))}>
-          <span
-          className='pointer'
-          style={{color: grey800, margin: '0 10px', userSelect: 'none'}}
-          >Advance Search <i className={`fa fa-${advanceSearchOpen ? 'minus' : 'plus'} `} /> </span>
+      <div>
+        <div className='vertical-center'>
+          <div style={{width: 300}} >
+            <Select
+            multi
+            placeholder='Beats (e.g. Technology, Science)'
+            labelKey='value'
+            value={this.state.beats}
+            options={beatOptions}
+            onChange={beats => this.setState({beats})}
+            />
+          </div>
+        {hideable &&
+          <div className='right' onClick={_ => this.setState(prev => ({advancedSearchOpen: !prev.advancedSearchOpen}))}>
+            <span
+            className='pointer'
+            style={{color: grey800, margin: '0 10px', userSelect: 'none'}}
+            >Advance Search <i className={`fa fa-${advancedSearchOpen ? 'minus' : 'plus'} `} /> </span>
+          </div>}
+          <FlatButton primary className='right' label='Submit' onClick={this.onSubmit} />
         </div>
-        <div style={{width: 300}} >
-          <Select
-          multi
-          placeholder='Beats (e.g. Technology, Science)'
-          labelKey='value'
-          value={this.state.beats}
-          options={beatOptions}
-          onChange={beats => this.setState({beats})}
-          />
-        </div>
-      {advanceSearchOpen &&
+      {openPanel &&
         <div>
-          <div className='vertical-center'>
+          <div style={{margin: '15px 0'}} className='vertical-center'>
             <div style={{margin: '0 10px'}} >
               <label>Non-Freelancer Only</label>
               <input disabled={isFreelancer} type='checkbox' checked={isNotFreelancer} onChange={e => this.setState({isNotFreelancer: e.target.checked})} />

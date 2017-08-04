@@ -202,7 +202,7 @@ export class SearchContainer extends Component {
           overflowY: 'scroll',
           maxHeight: '100%'
         }} >
-          <SearchPage queryString={query} />
+          <SearchPage hideable queryString={query} />
         </Paper>
         {!contacts ? <div>LOADING...</div> : <SearchResults {...this.props} />}
       </div>

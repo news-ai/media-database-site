@@ -11,9 +11,9 @@ const ContactListItem = ({email, contactInfo, demographics, writingInformation, 
     padding: 3,
     // borderBottom: `3px solid ${blueGrey300}`,
     borderLeft: `3px solid ${lightBlue300}`,
-    backgroundColor: '#ffffff'
+    backgroundColor: '#ffffff',
   }} >
-    <div className='large-10 medium-9 small-8'>
+    <div className='large-7 medium-9 small-8'>
       <div className='row' style={{paddingLeft: 10}} >
         <div className='large-12 medium-12 small-12 columns'>
           <Link to={{
@@ -23,12 +23,12 @@ const ContactListItem = ({email, contactInfo, demographics, writingInformation, 
           }} style={{color: grey700, fontWeight: 'bold'}}>
           {contactInfo.fullName}
           </Link>
+        {organizations &&
+          <span style={{marginLeft: 15}} className='text'>{organizations[0].name}</span>}
         </div>
         <div className='large-12 medium-12 small-12 columns'>
-        {organizations &&
-          <span className='text'>{organizations[0].name}</span>}
         {organizations && organizations[0].name &&
-          <span className='text' style={{marginLeft: 10, color: grey700}} >{organizations[0].title}</span>}
+          <span className='text' style={{color: grey700}} >{organizations[0].title}</span>}
         </div>
         <div className='large-12 medium-12 small-12 columns'>
           <span style={{color: grey700}} className='text'>{demographics.locationGeneral}</span>
