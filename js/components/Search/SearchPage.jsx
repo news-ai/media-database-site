@@ -4,6 +4,8 @@ import withRouter from 'react-router/lib/withRouter';
 import Select from 'react-select';
 import {searchConstant} from './constants';
 
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+import Checkbox from 'material-ui/Checkbox';
 import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
 import FlatButton from 'material-ui/FlatButton';
@@ -47,10 +49,8 @@ class SearchPage extends Component {
       beats: [],
       locations: [{}],
       advancedSearchOpen: false,
-      isFreelancer: false,
-      isNotFreelancer: false,
-      isInfluencer: false,
-      isNotInfluencer: false,
+      freelancerSelect: 'freelancerInclude',
+      influencerSelect: 'influencerInclude',
     };
     this.onSubmit = this.onSubmit.bind(this);
     this.onLocationSelect = this.onLocationSelect.bind(this);
@@ -74,11 +74,14 @@ class SearchPage extends Component {
     if (this.props.queryString !== nextProps.queryString) {
       const query = JSON.parse(nextProps.queryString);
       if (query.beats) this.setState({beats: query.beats.map(beat => ({value: beat}))});
-      if (query.isFreelancer === true) this.setState({isFreelancer: true, isNotFreelancer: false});
-      else if (query.isFreelancer === false) this.setState({isNotFreelancer: true, isFreelancer: false});
 
-      if (query.isInfluencer === true) this.setState({isInfluencer: true, isNotInfluencer: false});
-      else if (query.isInfluencer === false) this.setState({isNotInfluencer: true, isInfluencer: false});
+      if (query.isFreelancer === true) this.setState({freelancerSelect: 'freelancerOnly'});
+      else if (query.isFreelancer === false) this.setState({freelancerSelect: 'freelancerExclude'});
+      else this.setState({freelancerSelect: 'freelancerInclude'});
+
+      if (query.isInfluencer === true) this.setState({influencerSelect: 'influencerOnly'});
+      else if (query.isInfluencer === false) this.setState({influencerSelect: 'influencerExclude'});
+      else this.setState({influencerSelect: 'influencerInclude'});
     }
   }
 
@@ -86,11 +89,11 @@ class SearchPage extends Component {
     const baseQuery = {};
     if (this.state.beats.length > 0) baseQuery.beats = this.state.beats.map(({value}) => value);
     if (this.state.advancedSearchOpen || !this.props.hideable) {
-      if (this.state.isFreelancer) baseQuery.isFreelancer = true;
-      else if (this.state.isNotFreelancer) baseQuery.isFreelancer = false;
+      if (this.state.freelancerSelect === 'freelancerOnly') baseQuery.isFreelancer = true;
+      else if (this.state.freelancerSelect === 'freelancerExclude') baseQuery.isFreelancer = false;
 
-      if (this.state.isInfluencer) baseQuery.isInfluencer = true;
-      else if (this.state.isNotInfluencer) baseQuery.isNotInfluencer = false;
+      if (this.state.influencerSelect === 'influencerOnly') baseQuery.isInfluencer = true;
+      else if (this.state.influencerSelect === 'influencerExclude') baseQuery.isInfluencer = false;
 
       if (this.state.locations.some(({country, city, state}) => country || state || city)) {
         const locations = this.state.locations
@@ -101,15 +104,15 @@ class SearchPage extends Component {
     }
     console.log(baseQuery);
 
-    if (!isEmpty(baseQuery)) {
-      this.props.fetchSearch(baseQuery);
-      this.props.router.push({
-        pathname: `/search`,
-        query: {
-          q: JSON.stringify(baseQuery)
-        }
-      });
-    }
+    // if (!isEmpty(baseQuery)) {
+    //   this.props.fetchSearch(baseQuery);
+    //   this.props.router.push({
+    //     pathname: `/search`,
+    //     query: {
+    //       q: JSON.stringify(baseQuery)
+    //     }
+    //   });
+    // }
   }
 
   onLocationAdd() {
@@ -131,7 +134,7 @@ class SearchPage extends Component {
 
   render() {
     const {hideable} = this.props;
-    const {advancedSearchOpen, isNotFreelancer, isFreelancer, isInfluencer, isNotInfluencer} = this.state;
+    const {advancedSearchOpen, freelancerSelect, influencerSelect} = this.state;
     const openPanel = hideable ? advancedSearchOpen : true;
     return (
       <div>
@@ -157,22 +160,22 @@ class SearchPage extends Component {
         </div>
       {openPanel &&
         <div>
-          <div style={{margin: '15px 0'}} className='vertical-center'>
-            <div style={{margin: '0 10px'}} >
-              <label>Non-Freelancer Only</label>
-              <input disabled={isFreelancer} type='checkbox' checked={isNotFreelancer} onChange={e => this.setState({isNotFreelancer: e.target.checked})} />
+          <div style={{margin: '15px 0'}}>
+            <div>
+              <label>Is Freelancer</label>
+              <RadioButtonGroup value={freelancerSelect} defaultSelected='freelancerInclude' name='freelancer' onChange={(e, value) => this.setState({freelancerSelect: value})} >
+                <RadioButton value='freelancerInclude' label='Include' />
+                <RadioButton value='freelancerExclude' label='Exclude' />
+                <RadioButton value='freelancerOnly' label='Only' />
+              </RadioButtonGroup>
             </div>
-            <div style={{margin: '0 10px'}} >
-              <label>Freelancer Only</label>
-              <input disabled={isNotFreelancer} type='checkbox' checked={isFreelancer} onChange={e => this.setState({isFreelancer: e.target.checked})} />
-            </div>
-            <div style={{margin: '0 10px'}} >
-              <label>Non-Influencer Only</label>
-              <input disabled={isInfluencer} type='checkbox' checked={isNotInfluencer} onChange={e => this.setState({isNotInfluencer: e.target.checked})} />
-            </div>
-            <div style={{margin: '0 10px'}} >
-              <label>Influencer Only</label>
-              <input disabled={isNotInfluencer} type='checkbox' checked={isInfluencer} onChange={e => this.setState({isInfluencer: e.target.checked})} />
+            <div>
+              <label>Is Influencer</label>
+              <RadioButtonGroup value={influencerSelect} defaultSelected='influencerInclude' name='influencer' onChange={(e, value) => this.setState({influencerSelect: value})} >
+                <RadioButton value='influencerInclude' label='Include' />
+                <RadioButton value='influencerExclude' label='Exclude' />
+                <RadioButton value='influencerOnly' label='Only' />
+              </RadioButtonGroup>
             </div>
           </div>
           <div>
