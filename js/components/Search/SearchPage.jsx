@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import withRouter from 'react-router/lib/withRouter';
+import styled from 'styled-components';
 import Select from 'react-select';
 import {searchConstant} from './constants';
 
@@ -12,7 +13,7 @@ import FlatButton from 'material-ui/FlatButton';
 import isEmpty from 'lodash/isEmpty';
 import queryString from 'query-string';
 import pickBy from 'lodash/pickBy';
-import {grey600, grey800} from 'material-ui/styles/colors';
+import {grey400, grey600, grey800} from 'material-ui/styles/colors';
 import LocationSelector from 'components/Search/LocationSelector';
 
 import 'react-select/dist/react-select.css';
@@ -41,6 +42,19 @@ const beatOptions = [
   {value: 'Weather'},
   {value: 'World'},
 ];
+
+const RadioContainer = styled.div`
+  padding: 10px;
+  margin: 5px;
+  border: 1px solid ${grey400};
+  border-radius: 10px;
+  display: inline-block;
+`;
+
+const Label = styled.label`
+  margin-bottom: 5px;
+  text-align: center;
+`;
 
 class SearchPage extends Component {
   constructor(props) {
@@ -160,33 +174,31 @@ class SearchPage extends Component {
         </div>
       {openPanel &&
         <div>
-          <div style={{margin: '15px 0'}}>
-            <div>
-              <label>Is Freelancer</label>
-              <RadioButtonGroup value={freelancerSelect} defaultSelected='freelancerInclude' name='freelancer' onChange={(e, value) => this.setState({freelancerSelect: value})} >
-                <RadioButton value='freelancerInclude' label='Include' />
-                <RadioButton value='freelancerExclude' label='Exclude' />
-                <RadioButton value='freelancerOnly' label='Only' />
-              </RadioButtonGroup>
-            </div>
-            <div>
-              <label>Is Influencer</label>
-              <RadioButtonGroup value={influencerSelect} defaultSelected='influencerInclude' name='influencer' onChange={(e, value) => this.setState({influencerSelect: value})} >
-                <RadioButton value='influencerInclude' label='Include' />
-                <RadioButton value='influencerExclude' label='Exclude' />
-                <RadioButton value='influencerOnly' label='Only' />
-              </RadioButtonGroup>
-            </div>
-          </div>
+          <RadioContainer>
+            <Label>Is Freelancer</Label>
+            <RadioButtonGroup value={freelancerSelect} defaultSelected='freelancerInclude' name='freelancer' onChange={(e, value) => this.setState({freelancerSelect: value})} >
+              <RadioButton value='freelancerInclude' label='Include' />
+              <RadioButton value='freelancerExclude' label='Exclude' />
+              <RadioButton value='freelancerOnly' label='Only' />
+            </RadioButtonGroup>
+          </RadioContainer>
+          <RadioContainer>
+            <Label>Is Influencer</Label>
+            <RadioButtonGroup value={influencerSelect} defaultSelected='influencerInclude' name='influencer' onChange={(e, value) => this.setState({influencerSelect: value})} >
+              <RadioButton value='influencerInclude' label='Include' />
+              <RadioButton value='influencerExclude' label='Exclude' />
+              <RadioButton value='influencerOnly' label='Only' />
+            </RadioButtonGroup>
+          </RadioContainer>
           <div>
             <label>Location(s)</label>
+            <LocationSelector
+            locations={this.state.locations}
+            onLocationSelect={this.onLocationSelect}
+            onLocationAdd={this.onLocationAdd}
+            onLocationDelete={this.onLocationDelete}
+            />
           </div>
-          <LocationSelector
-          locations={this.state.locations}
-          onLocationSelect={this.onLocationSelect}
-          onLocationAdd={this.onLocationAdd}
-          onLocationDelete={this.onLocationDelete}
-          />
         </div>}
       </div>
     );
