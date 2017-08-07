@@ -113,6 +113,7 @@ class SearchResults extends Component {
       <div style={{marginTop: 50}} >
         <div>
           <span>{this.props.total} results found.</span>
+        {/*
           <span className='text' style={styles.limit.label}>Showing</span>
           <select
           style={styles.limit.select}
@@ -125,12 +126,16 @@ class SearchResults extends Component {
             <option value={50}>50</option>
           </select>
           <span className='text' style={styles.limit.label} >results per page</span>
+        */}
         </div>
-        {slicedContacts.map((contact, i) =>
-          <div style={{borderBottom: `3px solid ${grey400}`, margin: 5}} >
-            <ContactListItem key={contact.email} {...contact} />
+        <div className='row horizontal-center'>
+          <div className='large-7 medium-9 columns'>
+          {slicedContacts.map((contact, i) =>
+            <div style={{margin: 5}} >
+              <ContactListItem key={contact.email} {...contact} />
+            </div>)}
           </div>
-          )}
+        </div>
         <div style={{margin: '30px 0'}} className='vertical-center horizontal-center'>
         {page > 1 &&
           <Link
@@ -144,7 +149,8 @@ class SearchResults extends Component {
             }}>
             <IconButton iconClassName='fa fa-arrow-left' label='Previous' />
           </Link>}
-          <span style={{margin: '0 10px'}} >{page} of {numPages} pages</span>
+        {numPages &&
+          <span style={{margin: '0 10px'}} >{page} of {numPages} pages</span>}
         {page < numPages &&
           <Link
           to={{
@@ -193,8 +199,7 @@ export class SearchContainer extends Component {
     return (
       <div>
         <Paper zDepth={2} style={{
-          position: 'fixed',
-          top: 0,
+          position: 'absolute',
           width: '100%',
           backgroundColor: '#ffffff',
           padding: '5px 10px',
@@ -202,7 +207,7 @@ export class SearchContainer extends Component {
           overflowY: 'scroll',
           maxHeight: '100%'
         }} >
-          <SearchPage hideable queryString={query} />
+          <SearchPage queryString={query} />
         </Paper>
         {!contacts ? <div>LOADING...</div> : <SearchResults {...this.props} />}
       </div>

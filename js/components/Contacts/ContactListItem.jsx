@@ -9,11 +9,11 @@ import {assignToEmpty} from 'utils/assign';
 const ContactListItem = ({email, contactInfo, demographics, writingInformation, organizations, photos}) => (
   <div className='row' style={{
     padding: 3,
-    // borderBottom: `3px solid ${blueGrey300}`,
+    borderBottom: `3px solid ${blueGrey300}`,
     borderLeft: `3px solid ${lightBlue300}`,
     backgroundColor: '#ffffff',
   }} >
-    <div className='large-7 medium-9 small-8'>
+    <div className='large-10 medium-9 small-8'>
       <div className='row' style={{paddingLeft: 10}} >
         <div className='large-12 medium-12 small-12 columns'>
           <Link to={{
@@ -42,7 +42,7 @@ const ContactListItem = ({email, contactInfo, demographics, writingInformation, 
         </div>
       </div>
     </div>
-    <div className='large-2 medium-3 small-4 vertical-center horizontal-center'>
+    <div className='large-2 medium-3 small-4 vertical-center right'>
     {photos &&
       <Image style={{borderRadius: '4%', maxHeight: 90, maxWidth: 90}} src={photos[0].url} />}
     </div>

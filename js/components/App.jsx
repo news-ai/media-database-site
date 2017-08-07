@@ -1,11 +1,36 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import styled from 'styled-components';
+import Link from 'react-router/lib/Link';
 
 import {actions as loginActions} from 'components/Login';
 import {loginConstant} from 'components/Login/constants';
 
 import Login from './Login';
 
+const TopBar = styled.ul`
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border-bottom: 1px solid red;
+`;
+
+const Button = styled.li`
+  float: left;
+  height: 100%;
+`;
+
+const HomeButton = Button.extend`
+  display: block;
+  text-align: center;
+  padding: 8px 16px;
+`;
+
+const MainContainer = styled.div`
+  width: 100%;
+  height: 100%;
+`;
 
 class App extends Component {
   constructor(props) {
@@ -26,29 +51,26 @@ class App extends Component {
     if (props.isLogin) {
       renderNode = <div>You don't have access to NewsAI Media Database solution. Get access here.</div>;
       if (props.person.mediadatabaseaccess) {
-        renderNode = this.props.children;
+        renderNode = (
+          <div>
+            <TopBar>
+              <HomeButton>
+                <Link to='/'>Home</Link>
+              </HomeButton>
+            </TopBar>
+            <div>{this.props.children}</div>
+          </div>
+          );
       }
     }
 
     return (
-      <div style={styles.container}>
+      <MainContainer>
       {renderNode}
-      </div>
+      </MainContainer>
       );
   }
 }
-
-const styles = {
-  btn: {margin: 10},
-  dialogContainer: {margin: '10px 0'},
-  intercomBtn: {
-    position: 'fixed',
-    bottom: 20,
-    right: 20
-  },
-  container: {width: '100%', height: '100%'},
-  btnLabel: {textTransform: 'none'},
-};
 
 const mapStateToProps = (state, props) => {
   return {

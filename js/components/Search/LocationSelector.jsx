@@ -9,30 +9,37 @@ import states from './states';
 import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
 import FlatButton from 'material-ui/FlatButton';
-import {grey600} from 'material-ui/styles/colors';
+import {grey300, grey500, grey600, grey700} from 'material-ui/styles/colors';
 import debounce from 'es6-promise-debounce';
+import styled from 'styled-components';
 
 import 'react-select/dist/react-select.css';
 
-const styles = {
-  select: {
-    width: 200,
-    display: 'inline-block'
-  },
-  selectContainer: {
-    margin: '10px 0'
-  },
-  smallIcon: {
-    width: 18,
-    height: 18,
-  },
-  small: {
-    width: 36,
-    height: 36,
-    padding: 8,
-  },
-};
+const MainContainer = styled.div`
+  width: 200px;
+  margin-top: 8px;
+`;
 
+const SelectContainer = styled.div`
+  display: 'block'
+`;
+
+const ButtonContainer = styled.div`
+  text-align: right;
+`;
+
+const RemoveButton = styled.i.attrs({
+  className: 'fa fa-times'
+})`
+  fontSize: 2em;
+  color: ${grey500};
+  margin: 3px;
+  cursor: pointer;
+
+  &:hover {
+    color: ${grey700};
+  }
+`;
 
 class Selector extends Component {
   constructor(props) {
@@ -80,48 +87,40 @@ class Selector extends Component {
   render() {
     const {index, country, state, city} = this.props;
     return (
-      <div style={styles.selectContainer} >
-        <div className='vertical-center'>
-          <div style={styles.select} >
-            <Select.Async
-            placeholder='Country'
-            labelKey='value'
-            onChange={this.onCountryChange}
-            value={country}
-            loadOptions={this.loadCountries}
-            />
-          </div>
-          <div style={styles.select} >
-            <Select.Async
-            placeholder='State'
-            labelKey='value'
-            onChange={this.onStateChange}
-            value={state}
-            loadOptions={this.loadStates}
-            />
-          </div>
-          <div style={styles.select} >
-            <Select.Async
-            placeholder='City'
-            labelKey='value'
-            onChange={this.onCityChange}
-            value={city}
-            loadOptions={this.loadCities}
-            />
-          </div>
-        {index > 0 &&
-          <div style={{margin: '0 10px'}} >
-            <IconButton
-            tooltip='Remove'
-            tooltipPosition='top-right'
-            style={styles.small}
-            iconStyle={Object.assign({}, styles.smallIcon, {color: grey600})}
-            iconClassName='fa fa-times'
-            onClick={this.props.onLocationDelete}
-            />
-          </div>}
-        </div>
-      </div>
+      <MainContainer>
+      {
+        index > 0 &&
+        <ButtonContainer>
+          <RemoveButton onClick={this.props.onLocationDelete} />
+        </ButtonContainer>}
+        <SelectContainer>
+          <Select.Async
+          placeholder='Country'
+          labelKey='value'
+          onChange={this.onCountryChange}
+          value={country}
+          loadOptions={this.loadCountries}
+          />
+        </SelectContainer>
+        <SelectContainer>
+          <Select.Async
+          placeholder='State'
+          labelKey='value'
+          onChange={this.onStateChange}
+          value={state}
+          loadOptions={this.loadStates}
+          />
+        </SelectContainer>
+        <SelectContainer>
+          <Select.Async
+          placeholder='City'
+          labelKey='value'
+          onChange={this.onCityChange}
+          value={city}
+          loadOptions={this.loadCities}
+          />
+        </SelectContainer>
+      </MainContainer>
       );
   }
 }

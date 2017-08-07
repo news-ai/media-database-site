@@ -7,11 +7,11 @@ import SearchPage from 'components/Search/SearchPage';
 const Home = (props) => {
   return (
   <div>
-    <div>
+  {/*
       <Link to='/contacts' >CONTACTS</Link>
-      <Publications />
-      <SearchPage />
-    </div>
+  */}
+    <SearchPage />
+    <Publications />
   </div>
   );
 };
