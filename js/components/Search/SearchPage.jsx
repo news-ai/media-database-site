@@ -10,6 +10,7 @@ import Checkbox from 'material-ui/Checkbox';
 import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
 import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
 import isEmpty from 'lodash/isEmpty';
 import queryString from 'query-string';
 import pickBy from 'lodash/pickBy';
@@ -44,6 +45,14 @@ const beatOptions = [
 ];
 
 const RadioContainer = styled.div`
+  padding: 10px;
+  margin: 5px;
+  border: 1px solid ${grey400};
+  border-radius: 10px;
+  display: inline-block;
+`;
+
+const LocationContainer = styled.div`
   padding: 10px;
   margin: 5px;
   border: 1px solid ${grey400};
@@ -116,17 +125,17 @@ class SearchPage extends Component {
         baseQuery.locations = locations;
       }
     }
-    console.log(baseQuery);
+    // console.log(baseQuery);
 
-    // if (!isEmpty(baseQuery)) {
-    //   this.props.fetchSearch(baseQuery);
-    //   this.props.router.push({
-    //     pathname: `/search`,
-    //     query: {
-    //       q: JSON.stringify(baseQuery)
-    //     }
-    //   });
-    // }
+    if (!isEmpty(baseQuery)) {
+      this.props.fetchSearch(baseQuery);
+      this.props.router.push({
+        pathname: `/search`,
+        query: {
+          q: JSON.stringify(baseQuery)
+        }
+      });
+    }
   }
 
   onLocationAdd() {
@@ -151,27 +160,27 @@ class SearchPage extends Component {
     const {advancedSearchOpen, freelancerSelect, influencerSelect} = this.state;
     const openPanel = hideable ? advancedSearchOpen : true;
     return (
-      <div>
-        <div className='vertical-center'>
-          <div style={{width: 300}} >
-            <Select
-            multi
-            placeholder='Beats (e.g. Technology, Science)'
-            labelKey='value'
-            value={this.state.beats}
-            options={beatOptions}
-            onChange={beats => this.setState({beats})}
-            />
-          </div>
-        {hideable &&
-          <div className='right' onClick={_ => this.setState(prev => ({advancedSearchOpen: !prev.advancedSearchOpen}))}>
-            <span
-            className='pointer'
-            style={{color: grey800, margin: '0 10px', userSelect: 'none'}}
-            >Advance Search <i className={`fa fa-${advancedSearchOpen ? 'minus' : 'plus'} `} /> </span>
-          </div>}
-          <FlatButton primary className='right' label='Submit' onClick={this.onSubmit} />
+      <div style={{borderRight: '1px solid black'}} >
+        <div style={{margin: '10px 0'}} >
+          <RaisedButton primary label='Submit' onClick={this.onSubmit} />
         </div>
+        <div style={{margin: '5px 0', width: 250}} >
+          <Select
+          multi
+          placeholder='Beats (e.g. Technology, Science)'
+          labelKey='value'
+          value={this.state.beats}
+          options={beatOptions}
+          onChange={beats => this.setState({beats})}
+          />
+        </div>
+      {hideable &&
+        <div className='right' onClick={_ => this.setState(prev => ({advancedSearchOpen: !prev.advancedSearchOpen}))}>
+          <span
+          className='pointer'
+          style={{color: grey800, margin: '0 10px', userSelect: 'none'}}
+          >Advance Search <i className={`fa fa-${advancedSearchOpen ? 'minus' : 'plus'} `} /> </span>
+        </div>}
       {openPanel &&
         <div>
           <RadioContainer>
@@ -190,7 +199,7 @@ class SearchPage extends Component {
               <RadioButton value='influencerOnly' label='Only' />
             </RadioButtonGroup>
           </RadioContainer>
-          <div>
+          <LocationContainer>
             <label>Location(s)</label>
             <LocationSelector
             locations={this.state.locations}
@@ -198,7 +207,7 @@ class SearchPage extends Component {
             onLocationAdd={this.onLocationAdd}
             onLocationDelete={this.onLocationDelete}
             />
-          </div>
+          </LocationContainer>
         </div>}
       </div>
     );

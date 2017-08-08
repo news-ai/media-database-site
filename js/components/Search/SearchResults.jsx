@@ -110,32 +110,11 @@ class SearchResults extends Component {
     // console.log(slicedContacts);
 
     return (
-      <div style={{marginTop: 50}} >
-        <div>
-          <span>{this.props.total} results found.</span>
-        {/*
-          <span className='text' style={styles.limit.label}>Showing</span>
-          <select
-          style={styles.limit.select}
-          className='clearfix'
-          value={limit}
-          onChange={this.handlePageLimitChange}
-          >
-            <option value={10}>10</option>
-            <option value={20}>20</option>
-            <option value={50}>50</option>
-          </select>
-          <span className='text' style={styles.limit.label} >results per page</span>
-        */}
-        </div>
-        <div className='row horizontal-center'>
-          <div className='large-7 medium-9 columns'>
-          {slicedContacts.map((contact, i) =>
-            <div style={{margin: 5}} >
-              <ContactListItem key={contact.email} {...contact} />
-            </div>)}
-          </div>
-        </div>
+      <div>
+      {slicedContacts.map((contact, i) =>
+        <div style={{margin: 5}} >
+          <ContactListItem key={contact.email} {...contact} />
+        </div>)}
         <div style={{margin: '30px 0'}} className='vertical-center horizontal-center'>
         {page > 1 &&
           <Link
@@ -197,19 +176,20 @@ export class SearchContainer extends Component {
     const {isReceiving, contacts, query} = this.props;
 
     return (
-      <div>
-        <Paper zDepth={2} style={{
-          position: 'absolute',
-          width: '100%',
+      <div className='row'>
+        <Paper className='large-3 medium-4 small-12 columns' zDepth={2} style={{
+          width: 300,
           backgroundColor: '#ffffff',
           padding: '5px 10px',
           zIndex: 1000,
           overflowY: 'scroll',
-          maxHeight: '100%'
+          height: '100%'
         }} >
           <SearchPage queryString={query} />
         </Paper>
+        <div className='large-9 medium-8 small-12 columns'>
         {!contacts ? <div>LOADING...</div> : <SearchResults {...this.props} />}
+        </div>
       </div>
     );
   }

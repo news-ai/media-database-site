@@ -141,7 +141,9 @@ class LocationSelector extends Component {
           onLocationSelect={obj => this.props.onLocationSelect(i, obj)}
           />
         )}
-        <FlatButton label='Add Location' icon={<FontIcon className='fa fa-plus' />} onClick={this.props.onLocationAdd} />
+        <div style={{textAlign: 'center', margin: '10px 0'}} >
+          <FlatButton label='Add Location' icon={<FontIcon className='fa fa-plus' />} onClick={this.props.onLocationAdd} />
+        </div>
       </div>
     );
   }
