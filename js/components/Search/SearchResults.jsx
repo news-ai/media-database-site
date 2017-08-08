@@ -111,8 +111,8 @@ class SearchResults extends Component {
 
     return (
       <div>
-        <div style={{marginLeft: 10}} >
-          {total} results found.
+        <div style={{marginRight: 10, textAlign: 'right'}} >
+          <span className='text' style={{color: grey700}} >{total} results found.</span>
         </div>
       {slicedContacts.map((contact, i) =>
         <div style={{margin: 5}} >
