@@ -58,7 +58,7 @@ class App extends Component {
                 <Link to='/'>Home</Link>
               </HomeButton>
             </TopBar>
-            <div>{this.props.children}</div>
+            {this.props.children}
           </div>
           );
       }

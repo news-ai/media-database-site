@@ -160,7 +160,7 @@ class SearchPage extends Component {
     const {advancedSearchOpen, freelancerSelect, influencerSelect} = this.state;
     const openPanel = hideable ? advancedSearchOpen : true;
     return (
-      <div style={{borderRight: '1px solid black'}} >
+      <div>
         <div style={{margin: '10px 0'}} >
           <RaisedButton primary label='Submit' onClick={this.onSubmit} />
         </div>
@@ -200,7 +200,7 @@ class SearchPage extends Component {
             </RadioButtonGroup>
           </RadioContainer>
           <LocationContainer>
-            <label>Location(s)</label>
+            <label>Location Filter(s)</label>
             <LocationSelector
             locations={this.state.locations}
             onLocationSelect={this.onLocationSelect}

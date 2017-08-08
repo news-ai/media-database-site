@@ -111,6 +111,9 @@ class SearchResults extends Component {
 
     return (
       <div>
+        <div style={{marginLeft: 10}} >
+          {total} results found.
+        </div>
       {slicedContacts.map((contact, i) =>
         <div style={{margin: 5}} >
           <ContactListItem key={contact.email} {...contact} />
@@ -176,18 +179,19 @@ export class SearchContainer extends Component {
     const {isReceiving, contacts, query} = this.props;
 
     return (
-      <div className='row'>
-        <Paper className='large-3 medium-4 small-12 columns' zDepth={2} style={{
+      <div>
+        <Paper zDepth={2} style={{
+          display: 'block',
+          position: 'absolute',
           width: 300,
           backgroundColor: '#ffffff',
           padding: '5px 10px',
-          zIndex: 1000,
-          overflowY: 'scroll',
-          height: '100%'
+          height: 'auto',
+          minHeight: '100%'
         }} >
           <SearchPage queryString={query} />
         </Paper>
-        <div className='large-9 medium-8 small-12 columns'>
+        <div style={{position: 'absolute', marginLeft: 300}} >
         {!contacts ? <div>LOADING...</div> : <SearchResults {...this.props} />}
         </div>
       </div>
