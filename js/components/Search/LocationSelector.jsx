@@ -16,12 +16,12 @@ import styled from 'styled-components';
 import 'react-select/dist/react-select.css';
 
 const MainContainer = styled.div`
-  width: 200px;
   margin-top: 8px;
 `;
 
 const SelectContainer = styled.div`
-  display: 'block'
+  display: 'inline-block';
+  min-width: 130px;
 `;
 
 const ButtonContainer = styled.div`
@@ -38,6 +38,18 @@ const RemoveButton = styled.i.attrs({
 
   &:hover {
     color: ${grey700};
+  }
+`;
+
+const StyledAsyncSelect = styled(Select.Async)`
+  &.Select--single  {
+    .Select-value {
+      font-size: 0.8em;
+    }
+  }
+
+  & .Select-placeholder {
+    font-size: 0.8em;
   }
 `;
 
@@ -93,33 +105,35 @@ class Selector extends Component {
         <ButtonContainer>
           <RemoveButton onClick={this.props.onLocationDelete} />
         </ButtonContainer>}
-        <SelectContainer>
-          <Select.Async
-          placeholder='Country'
-          labelKey='value'
-          onChange={this.onCountryChange}
-          value={country}
-          loadOptions={this.loadCountries}
-          />
-        </SelectContainer>
-        <SelectContainer>
-          <Select.Async
-          placeholder='State'
-          labelKey='value'
-          onChange={this.onStateChange}
-          value={state}
-          loadOptions={this.loadStates}
-          />
-        </SelectContainer>
-        <SelectContainer>
-          <Select.Async
-          placeholder='City'
-          labelKey='value'
-          onChange={this.onCityChange}
-          value={city}
-          loadOptions={this.loadCities}
-          />
-        </SelectContainer>
+        <div className='vertical-center'>
+          <SelectContainer>
+            <StyledAsyncSelect
+            placeholder='Country'
+            labelKey='value'
+            onChange={this.onCountryChange}
+            value={country}
+            loadOptions={this.loadCountries}
+            />
+          </SelectContainer>
+          <SelectContainer>
+            <StyledAsyncSelect
+            placeholder='State/Territory'
+            labelKey='value'
+            onChange={this.onStateChange}
+            value={state}
+            loadOptions={this.loadStates}
+            />
+          </SelectContainer>
+          <SelectContainer>
+            <StyledAsyncSelect
+            placeholder='City'
+            labelKey='value'
+            onChange={this.onCityChange}
+            value={city}
+            loadOptions={this.loadCities}
+            />
+          </SelectContainer>
+        </div>
       </MainContainer>
       );
   }

@@ -10,7 +10,7 @@ import IconButton from 'material-ui/IconButton';
 import {searchConstant} from './constants';
 import {blue500, grey400, grey700, grey800} from 'material-ui/styles/colors';
 import ContactListItem from 'components/Contacts/ContactListItem';
-import SearchPage from 'components/Search/SearchPage';
+import SearchSideBar from 'components/Search/SearchSideBar';
 import Paper from 'material-ui/Paper';
 
 const beatOptions = [
@@ -189,7 +189,7 @@ export class SearchContainer extends Component {
           height: 'auto',
           minHeight: '100%'
         }} >
-          <SearchPage queryString={query} />
+          <SearchSideBar queryString={query} />
         </Paper>
         <div style={{position: 'absolute', marginLeft: 300}} >
         {!contacts ? <div>LOADING...</div> : <SearchResults {...this.props} />}

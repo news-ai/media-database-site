@@ -65,12 +65,6 @@ const Label = styled.label`
   text-align: center;
 `;
 
-const StyledSelect = styled(Select)`
-  & .Select-placeholder {
-    font-size: 0.8em;
-  }
-`;
-
 class SearchPage extends Component {
   constructor(props) {
     super(props);
@@ -163,48 +157,46 @@ class SearchPage extends Component {
   render() {
     const {freelancerSelect, influencerSelect} = this.state;
     return (
-      <div className='horizontal-center' >
-        <div>
-          <div style={{margin: '5px 0', width: 250}} >
-            <label>Beat(s)</label>
-            <StyledSelect
-            multi
-            placeholder='Beats (e.g. Technology, Science)'
-            labelKey='value'
-            value={this.state.beats}
-            options={beatOptions}
-            onChange={beats => this.setState({beats})}
-            />
-          </div>
-          <RadioContainer>
-            <Label>Is Freelancer</Label>
-            <RadioButtonGroup value={freelancerSelect} defaultSelected='freelancerInclude' name='freelancer' onChange={(e, value) => this.setState({freelancerSelect: value})} >
-              <RadioButton value='freelancerInclude' label='Include' />
-              <RadioButton value='freelancerExclude' label='Exclude' />
-              <RadioButton value='freelancerOnly' label='Only' />
-            </RadioButtonGroup>
-          </RadioContainer>
-          <RadioContainer>
-            <Label>Is Influencer</Label>
-            <RadioButtonGroup value={influencerSelect} defaultSelected='influencerInclude' name='influencer' onChange={(e, value) => this.setState({influencerSelect: value})} >
-              <RadioButton value='influencerInclude' label='Include' />
-              <RadioButton value='influencerExclude' label='Exclude' />
-              <RadioButton value='influencerOnly' label='Only' />
-            </RadioButtonGroup>
-          </RadioContainer>
-          <LocationContainer>
-            <label>Location Filter(s)</label>
-            <LocationSelector
-            locations={this.state.locations}
-            onLocationSelect={this.onLocationSelect}
-            onLocationAdd={this.onLocationAdd}
-            onLocationDelete={this.onLocationDelete}
-            />
-          </LocationContainer>
-          <div style={{margin: '10px 0'}} >
-            <RaisedButton primary label='Submit' onClick={this.onSubmit} />
-          </div>
+      <div>
+        <div style={{margin: '10px 0'}} >
+          <RaisedButton primary label='Submit' onClick={this.onSubmit} />
         </div>
+        <div style={{margin: '5px 0', width: 250}} >
+          <label>Beat(s)</label>
+          <Select
+          multi
+          placeholder='Beats (e.g. Technology, Science)'
+          labelKey='value'
+          value={this.state.beats}
+          options={beatOptions}
+          onChange={beats => this.setState({beats})}
+          />
+        </div>
+        <RadioContainer>
+          <Label>Is Freelancer</Label>
+          <RadioButtonGroup value={freelancerSelect} defaultSelected='freelancerInclude' name='freelancer' onChange={(e, value) => this.setState({freelancerSelect: value})} >
+            <RadioButton value='freelancerInclude' label='Include' />
+            <RadioButton value='freelancerExclude' label='Exclude' />
+            <RadioButton value='freelancerOnly' label='Only' />
+          </RadioButtonGroup>
+        </RadioContainer>
+        <RadioContainer>
+          <Label>Is Influencer</Label>
+          <RadioButtonGroup value={influencerSelect} defaultSelected='influencerInclude' name='influencer' onChange={(e, value) => this.setState({influencerSelect: value})} >
+            <RadioButton value='influencerInclude' label='Include' />
+            <RadioButton value='influencerExclude' label='Exclude' />
+            <RadioButton value='influencerOnly' label='Only' />
+          </RadioButtonGroup>
+        </RadioContainer>
+        <LocationContainer>
+          <label>Location Filter(s)</label>
+          <LocationSelector
+          locations={this.state.locations}
+          onLocationSelect={this.onLocationSelect}
+          onLocationAdd={this.onLocationAdd}
+          onLocationDelete={this.onLocationDelete}
+          />
+        </LocationContainer>
       </div>
     );
   }
