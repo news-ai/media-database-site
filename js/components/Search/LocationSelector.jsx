@@ -21,7 +21,7 @@ const MainContainer = styled.div`
 
 const SelectContainer = styled.div`
   display: 'inline-block';
-  min-width: 130px;
+  min-width: 150px;
 `;
 
 const ButtonContainer = styled.div`
@@ -31,7 +31,7 @@ const ButtonContainer = styled.div`
 const RemoveButton = styled.i.attrs({
   className: 'fa fa-times'
 })`
-  fontSize: 2em;
+  font-size: 0.9em;
   color: ${grey500};
   margin: 3px;
   cursor: pointer;
@@ -141,24 +141,17 @@ class Selector extends Component {
 
 class LocationSelector extends Component {
   render() {
-    return (
-      <div>
-      {this.props.locations
-        .map(({country, state, city}, i) =>
-          <Selector
-          key={`location-selector-set-${i}`}
-          index={i}
-          country={country}
-          state={state}
-          city={city}
-          onLocationDelete={_ => this.props.onLocationDelete(i)}
-          onLocationSelect={obj => this.props.onLocationSelect(i, obj)}
-          />
-        )}
-        <div style={{textAlign: 'center', margin: '10px 0'}} >
-          <FlatButton label='Add Location' icon={<FontIcon className='fa fa-plus' />} onClick={this.props.onLocationAdd} />
-        </div>
-      </div>
+    return this.props.locations
+    .map(({country, state, city}, i) =>
+      <Selector
+      key={`location-selector-set-${i}`}
+      index={i}
+      country={country}
+      state={state}
+      city={city}
+      onLocationDelete={_ => this.props.onLocationDelete(i)}
+      onLocationSelect={obj => this.props.onLocationSelect(i, obj)}
+      />
     );
   }
 }

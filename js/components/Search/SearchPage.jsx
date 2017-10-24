@@ -14,8 +14,9 @@ import RaisedButton from 'material-ui/RaisedButton';
 import isEmpty from 'lodash/isEmpty';
 import queryString from 'query-string';
 import pickBy from 'lodash/pickBy';
-import {grey400, grey600, grey800} from 'material-ui/styles/colors';
+import {grey400, grey500, grey600, grey700, grey800} from 'material-ui/styles/colors';
 import LocationSelector from 'components/Search/LocationSelector';
+import MultiToggle from 'components/MultiToggle';
 
 import 'react-select/dist/react-select.css';
 
@@ -55,9 +56,7 @@ const RadioContainer = styled.div`
 const LocationContainer = styled.div`
   padding: 10px;
   margin: 5px;
-  border: 1px solid ${grey400};
-  border-radius: 10px;
-  display: inline-block;
+  display: block;
 `;
 
 const Label = styled.label`
@@ -165,8 +164,19 @@ class SearchPage extends Component {
     return (
       <div className='horizontal-center' >
         <div>
-          <div style={{margin: '5px 0', width: 250}} >
-            <label>Beat(s)</label>
+          <div style={{margin: '5px 0', width: 250, display: 'block'}} >
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }} >
+              <label>Beat(s)</label>
+              <span style={{
+                fontSize: '0.7em',
+                userSelect: 'none',
+                cursor: 'pointer'
+              }} >MORE +</span>
+            </div>
             <StyledSelect
             multi
             placeholder='Beats (e.g. Technology, Science)'
@@ -176,24 +186,47 @@ class SearchPage extends Component {
             onChange={beats => this.setState({beats})}
             />
           </div>
-          <RadioContainer>
-            <Label>Is Freelancer</Label>
-            <RadioButtonGroup value={freelancerSelect} defaultSelected='freelancerInclude' name='freelancer' onChange={(e, value) => this.setState({freelancerSelect: value})} >
-              <RadioButton value='freelancerInclude' label='Include' />
-              <RadioButton value='freelancerExclude' label='Exclude' />
-              <RadioButton value='freelancerOnly' label='Only' />
-            </RadioButtonGroup>
-          </RadioContainer>
-          <RadioContainer>
-            <Label>Is Influencer</Label>
-            <RadioButtonGroup value={influencerSelect} defaultSelected='influencerInclude' name='influencer' onChange={(e, value) => this.setState({influencerSelect: value})} >
-              <RadioButton value='influencerInclude' label='Include' />
-              <RadioButton value='influencerExclude' label='Exclude' />
-              <RadioButton value='influencerOnly' label='Only' />
-            </RadioButtonGroup>
-          </RadioContainer>
+          <div>
+            <MultiToggle
+            options={[
+              {displayName: 'Include', value: 'freelancerInclude'},
+              {displayName: 'Exclude', value: 'freelancerExclude'},
+              {displayName: 'Only', value: 'freelancerOnly'},
+            ]}
+            selectedOption={freelancerSelect}
+            onSelectOption={value => this.setState({freelancerSelect: value})}
+            label='Is Freelancer'
+            />
+            {/*
+            <RadioContainer>
+              <Label>Is Freelancer</Label>
+              <RadioButtonGroup value={freelancerSelect} defaultSelected='freelancerInclude' name='freelancer' onChange={(e, value) => this.setState({freelancerSelect: value})} >
+                <RadioButton value='freelancerInclude' label='Include' />
+                <RadioButton value='freelancerExclude' label='Exclude' />
+                <RadioButton value='freelancerOnly' label='Only' />
+              </RadioButtonGroup>
+            </RadioContainer>
+            */}
+            <RadioContainer>
+              <Label>Is Influencer</Label>
+              <RadioButtonGroup value={influencerSelect} defaultSelected='influencerInclude' name='influencer' onChange={(e, value) => this.setState({influencerSelect: value})} >
+                <RadioButton value='influencerInclude' label='Include' />
+                <RadioButton value='influencerExclude' label='Exclude' />
+                <RadioButton value='influencerOnly' label='Only' />
+              </RadioButtonGroup>
+            </RadioContainer>
+          </div>
           <LocationContainer>
-            <label>Location Filter(s)</label>
+            <div className='vertical-center'>
+              <label>Location Filter(s)</label>
+              <FontIcon
+              className='fa fa-plus pointer'
+              style={{fontSize: '0.9em', margin: '0 10px'}}
+              color={grey500}
+              hoverColor={grey700}
+              onClick={this.onLocationAdd}
+              />
+            </div>
             <LocationSelector
             locations={this.state.locations}
             onLocationSelect={this.onLocationSelect}
