@@ -45,25 +45,6 @@ const beatOptions = [
   {value: 'World'},
 ];
 
-// const RadioContainer = styled.div`
-//   padding: 10px;
-//   margin: 5px;
-//   border: 1px solid ${grey400};
-//   border-radius: 10px;
-//   display: inline-block;
-// `;
-
-const LocationContainer = styled.div`
-  padding: 10px;
-  margin: 5px;
-  display: block;
-`;
-
-// const Label = styled.label`
-//   margin-bottom: 5px;
-//   text-align: center;
-// `;
-
 const StyledSelect = styled(Select)`
   & .Select-placeholder {
     font-size: 0.8em;
@@ -141,7 +122,6 @@ class SearchPage extends Component {
         baseQuery.locations = locations;
       }
     }
-    // console.log(baseQuery);
 
     if (!isEmpty(baseQuery)) {
       this.props.fetchSearch(baseQuery);
@@ -175,64 +155,62 @@ class SearchPage extends Component {
   render() {
     const {freelancerSelect, influencerSelect} = this.state;
     return (
-      <div className='horizontal-center' >
+      <div style={{minWidth: 400}} >
+        <div style={{margin: '5px 0', width: 250, display: 'block'}} >
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }} >
+            <label>Beat(s)</label>
+          </div>
+          <StyledSelect
+          multi
+          placeholder='Beats (e.g. Technology, Science)'
+          labelKey='value'
+          value={this.state.beats}
+          options={beatOptions}
+          onChange={beats => this.setState({beats})}
+          />
+        </div>
         <div>
-          <div style={{margin: '5px 0', width: 250, display: 'block'}} >
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }} >
-              <label>Beat(s)</label>
-            </div>
-            <StyledSelect
-            multi
-            placeholder='Beats (e.g. Technology, Science)'
-            labelKey='value'
-            value={this.state.beats}
-            options={beatOptions}
-            onChange={beats => this.setState({beats})}
+          <div style={{width: 400}} >
+            <MultiToggle
+            options={freelancerToggleOptions}
+            selectedOption={freelancerSelect}
+            onSelectOption={value => this.setState({freelancerSelect: value})}
+            label='Is Freelancer'
             />
           </div>
-          <div>
-            <div style={{width: 400}} >
-              <MultiToggle
-              options={freelancerToggleOptions}
-              selectedOption={freelancerSelect}
-              onSelectOption={value => this.setState({freelancerSelect: value})}
-              label='Is Freelancer'
-              />
-            </div>
-            <div style={{width: 400}} >
-              <MultiToggle
-              options={influencerToggleOptions}
-              selectedOption={influencerSelect}
-              onSelectOption={value => this.setState({influencerSelect: value})}
-              label='Is Influencer'
-              />
-            </div>
-          </div>
-          <LocationContainer>
-            <div className='vertical-center'>
-              <label>Location Filter(s)</label>
-              <FontIcon
-              className='fa fa-plus pointer'
-              style={{fontSize: '0.9em', margin: '0 10px'}}
-              color={grey500}
-              hoverColor={grey700}
-              onClick={this.onLocationAdd}
-              />
-            </div>
-            <LocationSelector
-            locations={this.state.locations}
-            onLocationSelect={this.onLocationSelect}
-            onLocationAdd={this.onLocationAdd}
-            onLocationDelete={this.onLocationDelete}
+          <div style={{width: 400}} >
+            <MultiToggle
+            options={influencerToggleOptions}
+            selectedOption={influencerSelect}
+            onSelectOption={value => this.setState({influencerSelect: value})}
+            label='Is Influencer'
             />
-          </LocationContainer>
-          <div style={{margin: '10px 0'}} >
-            <RaisedButton primary label='Submit' onClick={this.onSubmit} />
           </div>
+        </div>
+        <div style={{margin: '10px 0'}} >
+          <div className='vertical-center'>
+            <label>Location Filter(s)</label>
+            <FontIcon
+            className='fa fa-plus pointer'
+            style={{fontSize: '0.9em', margin: '0 10px'}}
+            color={grey500}
+            hoverColor={grey700}
+            onClick={this.onLocationAdd}
+            />
+          </div>
+          <LocationSelector
+          locations={this.state.locations}
+          onLocationSelect={this.onLocationSelect}
+          onLocationAdd={this.onLocationAdd}
+          onLocationDelete={this.onLocationDelete}
+          />
+        </div>
+        <div style={{margin: '10px 0'}} >
+          <RaisedButton primary label='Submit' onClick={this.onSubmit} />
         </div>
       </div>
     );

@@ -10,8 +10,15 @@ const Home = (props) => {
   {/*
       <Link to='/contacts' >CONTACTS</Link>
   */}
-    <SearchPage />
+    <div className='horizontal-center' style={{margin: '20px 0'}} >
+      <h4>Search Database</h4>
+    </div>
+    <div className='horizontal-center' >
+      <SearchPage />
+    </div>
+  {/*
     <Publications />
+  */}
   </div>
   );
 };
