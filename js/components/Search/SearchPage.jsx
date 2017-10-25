@@ -45,13 +45,13 @@ const beatOptions = [
   {value: 'World'},
 ];
 
-const RadioContainer = styled.div`
-  padding: 10px;
-  margin: 5px;
-  border: 1px solid ${grey400};
-  border-radius: 10px;
-  display: inline-block;
-`;
+// const RadioContainer = styled.div`
+//   padding: 10px;
+//   margin: 5px;
+//   border: 1px solid ${grey400};
+//   border-radius: 10px;
+//   display: inline-block;
+// `;
 
 const LocationContainer = styled.div`
   padding: 10px;
@@ -197,24 +197,16 @@ class SearchPage extends Component {
             onSelectOption={value => this.setState({freelancerSelect: value})}
             label='Is Freelancer'
             />
-            {/*
-            <RadioContainer>
-              <Label>Is Freelancer</Label>
-              <RadioButtonGroup value={freelancerSelect} defaultSelected='freelancerInclude' name='freelancer' onChange={(e, value) => this.setState({freelancerSelect: value})} >
-                <RadioButton value='freelancerInclude' label='Include' />
-                <RadioButton value='freelancerExclude' label='Exclude' />
-                <RadioButton value='freelancerOnly' label='Only' />
-              </RadioButtonGroup>
-            </RadioContainer>
-            */}
-            <RadioContainer>
-              <Label>Is Influencer</Label>
-              <RadioButtonGroup value={influencerSelect} defaultSelected='influencerInclude' name='influencer' onChange={(e, value) => this.setState({influencerSelect: value})} >
-                <RadioButton value='influencerInclude' label='Include' />
-                <RadioButton value='influencerExclude' label='Exclude' />
-                <RadioButton value='influencerOnly' label='Only' />
-              </RadioButtonGroup>
-            </RadioContainer>
+            <MultiToggle
+            options={[
+              {displayName: 'Include', value: 'influencerInclude'},
+              {displayName: 'Exclude', value: 'influencerExclude'},
+              {displayName: 'Only', value: 'influencerOnly'},
+            ]}
+            selectedOption={influencerSelect}
+            onSelectOption={value => this.setState({influencerSelect: value})}
+            label='Is Influencer'
+            />
           </div>
           <LocationContainer>
             <div className='vertical-center'>
