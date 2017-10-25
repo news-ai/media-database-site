@@ -7,65 +7,17 @@ import Select from 'react-select';
 import isEmpty from 'lodash/isEmpty';
 import RaisedButton from 'material-ui/RaisedButton';
 import IconButton from 'material-ui/IconButton';
+import Dialog from 'material-ui/Dialog';
 import {searchConstant} from './constants';
 import {blue500, grey400, grey700, grey800} from 'material-ui/styles/colors';
 import ContactListItem from 'components/Contacts/ContactListItem';
 import SearchSideBar from 'components/Search/SearchSideBar';
 import Paper from 'material-ui/Paper';
 
-const beatOptions = [
-  {value: 'Arts and Entertainment'},
-  {value: 'Beauty'},
-  {value: 'Business and Finance'},
-  {value: 'Crime and Justice'},
-  {value: 'Education'},
-  {value: 'Energy'},
-  {value: 'Environment'},
-  {value: 'Fashion'},
-  {value: 'Food and Dining'},
-  {value: 'Health'},
-  {value: 'Media'},
-  {value: 'Opinion and Editorial'},
-  {value: 'Politics'},
-  {value: 'Real Estate'},
-  {value: 'Religion'},
-  {value: 'Science'},
-  {value: 'Sports'},
-  {value: 'Technology'},
-  {value: 'Transportation'},
-  {value: 'Travel'},
-  {value: 'Weather'},
-  {value: 'World'},
-];
-
-const styles = {
-  pagesContainer: {padding: '15px 10px', margin: '30px 10px'},
-  contactItemContainer: {margin: '10px 5px'},
-  limit: {
-    label: {margin: '0 5px', color: grey800},
-    container: {margin: '10px 0'},
-    select: {width: 60}
-  },
-  copy: {
-    btn: {margin: '0 5px', float: 'right'}
-  },
-  controls: {
-    checkbox: {fill: blue500},
-    container: {margin: '10px 0'}
-  },
-  selectLabel: {margin: '0 5px', float: 'right', color: grey700},
-  dialog: {
-    container: {height: 400},
-  },
-  container: {marginTop: 20, marginBottom: 10},
-  text: {fontSize: '2em', marginRight: 10}
-};
-
 class SearchResults extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      beats: [],
     };
     this.handlePageLimitChange = this.handlePageLimitChange.bind(this);
   }
@@ -154,7 +106,9 @@ class SearchResults extends Component {
 export class SearchContainer extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      isSearchOpen: false
+    };
   }
 
   componentWillMount() {
@@ -180,6 +134,7 @@ export class SearchContainer extends Component {
 
     return (
       <div>
+    {/*
         <Paper zDepth={2} style={{
           display: 'block',
           position: 'absolute',
@@ -189,9 +144,18 @@ export class SearchContainer extends Component {
           height: 'auto',
           minHeight: '100%'
         }} >
-          <SearchSideBar queryString={query} />
         </Paper>
-        <div style={{position: 'absolute', marginLeft: 300}} >
+    */}
+        <Dialog
+        autoScrollBodyContent
+        title='Search Query'
+        open={this.state.isSearchOpen}
+        onRequestClose={e => this.setState({isSearchOpen: false})}
+        >
+          <SearchSideBar queryString={query} />
+        </Dialog>
+        <RaisedButton label='Change Search Query' onClick={e => this.setState({isSearchOpen: true})} />
+        <div>
         {!contacts ? <div>LOADING...</div> : <SearchResults {...this.props} />}
         </div>
       </div>

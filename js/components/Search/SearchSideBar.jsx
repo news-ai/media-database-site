@@ -14,8 +14,9 @@ import RaisedButton from 'material-ui/RaisedButton';
 import isEmpty from 'lodash/isEmpty';
 import queryString from 'query-string';
 import pickBy from 'lodash/pickBy';
-import {grey400, grey600, grey800} from 'material-ui/styles/colors';
+import {grey400, grey500, grey600, grey700, grey800} from 'material-ui/styles/colors';
 import LocationSelector from 'components/Search/LocationSelector';
+import MultiToggle from 'components/MultiToggle';
 
 import 'react-select/dist/react-select.css';
 
@@ -44,33 +45,30 @@ const beatOptions = [
   {value: 'World'},
 ];
 
-const RadioContainer = styled.div`
-  padding: 10px;
-  margin: 5px;
-  border: 1px solid ${grey400};
-  border-radius: 10px;
-  display: inline-block;
+const StyledSelect = styled(Select)`
+  & .Select-placeholder {
+    font-size: 0.8em;
+  }
 `;
 
-const LocationContainer = styled.div`
-  padding: 10px;
-  margin: 5px;
-  border: 1px solid ${grey400};
-  border-radius: 10px;
-  display: inline-block;
-`;
+const freelancerToggleOptions = [
+  {displayName: 'Include', value: 'freelancerInclude'},
+  {displayName: 'Exclude', value: 'freelancerExclude'},
+  {displayName: 'Only', value: 'freelancerOnly'},
+];
 
-const Label = styled.label`
-  margin-bottom: 5px;
-  text-align: center;
-`;
+const influencerToggleOptions = [
+  {displayName: 'Include', value: 'influencerInclude'},
+  {displayName: 'Exclude', value: 'influencerExclude'},
+  {displayName: 'Only', value: 'influencerOnly'},
+];
 
 class SearchPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       beats: [],
-      locations: [{}],
+      locations: [{country: 'United States'}],
       freelancerSelect: 'freelancerInclude',
       influencerSelect: 'influencerInclude',
     };
@@ -124,7 +122,6 @@ class SearchPage extends Component {
         baseQuery.locations = locations;
       }
     }
-    // console.log(baseQuery);
 
     if (!isEmpty(baseQuery)) {
       this.props.fetchSearch(baseQuery);
@@ -138,6 +135,7 @@ class SearchPage extends Component {
   }
 
   onLocationAdd() {
+    // TODO: implement more countries when available
     const {locations} = this.state;
     this.setState({locations: [...locations, {country: 'United States'}]});
   }
@@ -157,13 +155,16 @@ class SearchPage extends Component {
   render() {
     const {freelancerSelect, influencerSelect} = this.state;
     return (
-      <div>
-        <div style={{margin: '10px 0'}} >
-          <RaisedButton primary label='Submit' onClick={this.onSubmit} />
-        </div>
-        <div style={{margin: '5px 0', width: 250}} >
-          <label>Beat(s)</label>
-          <Select
+      <div style={{minWidth: 400}} >
+        <div style={{margin: '5px 0', width: 250, display: 'block'}} >
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }} >
+            <label>Beat(s)</label>
+          </div>
+          <StyledSelect
           multi
           placeholder='Beats (e.g. Technology, Science)'
           labelKey='value'
@@ -172,31 +173,45 @@ class SearchPage extends Component {
           onChange={beats => this.setState({beats})}
           />
         </div>
-        <RadioContainer>
-          <Label>Is Freelancer</Label>
-          <RadioButtonGroup value={freelancerSelect} defaultSelected='freelancerInclude' name='freelancer' onChange={(e, value) => this.setState({freelancerSelect: value})} >
-            <RadioButton value='freelancerInclude' label='Include' />
-            <RadioButton value='freelancerExclude' label='Exclude' />
-            <RadioButton value='freelancerOnly' label='Only' />
-          </RadioButtonGroup>
-        </RadioContainer>
-        <RadioContainer>
-          <Label>Is Influencer</Label>
-          <RadioButtonGroup value={influencerSelect} defaultSelected='influencerInclude' name='influencer' onChange={(e, value) => this.setState({influencerSelect: value})} >
-            <RadioButton value='influencerInclude' label='Include' />
-            <RadioButton value='influencerExclude' label='Exclude' />
-            <RadioButton value='influencerOnly' label='Only' />
-          </RadioButtonGroup>
-        </RadioContainer>
-        <LocationContainer>
-          <label>Location Filter(s)</label>
+        <div>
+          <div style={{width: 400}} >
+            <MultiToggle
+            options={freelancerToggleOptions}
+            selectedOption={freelancerSelect}
+            onSelectOption={value => this.setState({freelancerSelect: value})}
+            label='Is Freelancer'
+            />
+          </div>
+          <div style={{width: 400}} >
+            <MultiToggle
+            options={influencerToggleOptions}
+            selectedOption={influencerSelect}
+            onSelectOption={value => this.setState({influencerSelect: value})}
+            label='Is Influencer'
+            />
+          </div>
+        </div>
+        <div style={{margin: '10px 0'}} >
+          <div className='vertical-center'>
+            <label>Location Filter(s)</label>
+            <FontIcon
+            className='fa fa-plus pointer'
+            style={{fontSize: '0.9em', margin: '0 10px'}}
+            color={grey500}
+            hoverColor={grey700}
+            onClick={this.onLocationAdd}
+            />
+          </div>
           <LocationSelector
           locations={this.state.locations}
           onLocationSelect={this.onLocationSelect}
           onLocationAdd={this.onLocationAdd}
           onLocationDelete={this.onLocationDelete}
           />
-        </LocationContainer>
+        </div>
+        <div className='horizontal-center' style={{margin: '30px 0'}} >
+          <RaisedButton primary label='Submit' onClick={this.onSubmit} />
+        </div>
       </div>
     );
   }
