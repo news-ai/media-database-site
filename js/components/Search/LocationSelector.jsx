@@ -21,7 +21,7 @@ const MainContainer = styled.div`
 
 const SelectContainer = styled.div`
   display: 'inline-block';
-  min-width: 150px;
+  min-width: 180px;
 `;
 
 const ButtonContainer = styled.div`
@@ -65,6 +65,7 @@ class Selector extends Component {
   }
 
   loadCountries(country, cb) {
+    // TODO: implement more countries when available
     cb(null, {options: [{value: 'United States'}]});
     // if (country.length > 0) {
     //   return api.get(`/database-contacts/locations?country=${country}`)
@@ -117,7 +118,8 @@ class Selector extends Component {
           </SelectContainer>
           <SelectContainer>
             <StyledAsyncSelect
-            placeholder='State/Territory'
+            disabled={!!!country}
+            placeholder='State/Territory (optional)'
             labelKey='value'
             onChange={this.onStateChange}
             value={state}
@@ -126,7 +128,8 @@ class Selector extends Component {
           </SelectContainer>
           <SelectContainer>
             <StyledAsyncSelect
-            placeholder='City'
+            disabled={!!!state}
+            placeholder='City (optional)'
             labelKey='value'
             onChange={this.onCityChange}
             value={city}

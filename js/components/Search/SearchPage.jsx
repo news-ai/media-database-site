@@ -59,10 +59,10 @@ const LocationContainer = styled.div`
   display: block;
 `;
 
-const Label = styled.label`
-  margin-bottom: 5px;
-  text-align: center;
-`;
+// const Label = styled.label`
+//   margin-bottom: 5px;
+//   text-align: center;
+// `;
 
 const StyledSelect = styled(Select)`
   & .Select-placeholder {
@@ -70,12 +70,24 @@ const StyledSelect = styled(Select)`
   }
 `;
 
+const freelancerToggleOptions = [
+  {displayName: 'Include', value: 'freelancerInclude'},
+  {displayName: 'Exclude', value: 'freelancerExclude'},
+  {displayName: 'Only', value: 'freelancerOnly'},
+];
+
+const influencerToggleOptions = [
+  {displayName: 'Include', value: 'influencerInclude'},
+  {displayName: 'Exclude', value: 'influencerExclude'},
+  {displayName: 'Only', value: 'influencerOnly'},
+];
+
 class SearchPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       beats: [],
-      locations: [{}],
+      locations: [{country: 'United States'}],
       freelancerSelect: 'freelancerInclude',
       influencerSelect: 'influencerInclude',
     };
@@ -143,6 +155,7 @@ class SearchPage extends Component {
   }
 
   onLocationAdd() {
+    // TODO: implement more countries when available
     const {locations} = this.state;
     this.setState({locations: [...locations, {country: 'United States'}]});
   }
@@ -171,11 +184,6 @@ class SearchPage extends Component {
               justifyContent: 'space-between',
             }} >
               <label>Beat(s)</label>
-              <span style={{
-                fontSize: '0.7em',
-                userSelect: 'none',
-                cursor: 'pointer'
-              }} >MORE +</span>
             </div>
             <StyledSelect
             multi
@@ -187,26 +195,22 @@ class SearchPage extends Component {
             />
           </div>
           <div>
-            <MultiToggle
-            options={[
-              {displayName: 'Include', value: 'freelancerInclude'},
-              {displayName: 'Exclude', value: 'freelancerExclude'},
-              {displayName: 'Only', value: 'freelancerOnly'},
-            ]}
-            selectedOption={freelancerSelect}
-            onSelectOption={value => this.setState({freelancerSelect: value})}
-            label='Is Freelancer'
-            />
-            <MultiToggle
-            options={[
-              {displayName: 'Include', value: 'influencerInclude'},
-              {displayName: 'Exclude', value: 'influencerExclude'},
-              {displayName: 'Only', value: 'influencerOnly'},
-            ]}
-            selectedOption={influencerSelect}
-            onSelectOption={value => this.setState({influencerSelect: value})}
-            label='Is Influencer'
-            />
+            <div style={{width: 400}} >
+              <MultiToggle
+              options={freelancerToggleOptions}
+              selectedOption={freelancerSelect}
+              onSelectOption={value => this.setState({freelancerSelect: value})}
+              label='Is Freelancer'
+              />
+            </div>
+            <div style={{width: 400}} >
+              <MultiToggle
+              options={influencerToggleOptions}
+              selectedOption={influencerSelect}
+              onSelectOption={value => this.setState({influencerSelect: value})}
+              label='Is Influencer'
+              />
+            </div>
           </div>
           <LocationContainer>
             <div className='vertical-center'>
